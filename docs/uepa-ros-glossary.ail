@@ -1,0 +1,629 @@
+# UEPA-ROS GLOSSARY
+
+**Version:** 1.0.0  
+**Type:** Canonical Terminology (English 100%)  
+**Format:** Markdown + YAML  
+**Authority:** CSA
+
+---
+
+## METADATA
+
+```yaml
+glossary:
+  id: "uepa-ros-glossary-v1.0"
+  scope: "UEPA + ROS + CAFE + RCME"
+  language: "English (canonical terms)"
+  total_terms: 150+
+  categories:
+    - Spaces
+    - Artifacts
+    - Engines
+    - Particles
+    - Authority
+    - Evidence
+    - Governance
+```
+
+---
+
+## A. SPACES (8 PRIMARY + 4 SPECIAL)
+
+### Primary Spaces
+
+```yaml
+spaces:
+  HO:
+    full_name: "Human Office / Helio"
+    role: "Storage, canon repository"
+    owner: "HIE (Human Intelligence Entity)"
+    authority: "T5 Sovereign"
+    key_paths: ["ho://r/ars-r/", "ho://milky/", "ho://gala/"]
+    
+  HA:
+    full_name: "High Authority / Authority Space Operating Devices"
+    role: "Execution, identity, local cache"
+    owner: "Device + User"
+    authority: "T0-T5"
+    key_paths: ["ha://d/cache/", "ha://e/rr/", "ha://rew/"]
+    
+  GO:
+    full_name: "Governance Space"
+    role: "Law, judgment, constitutional enforcement"
+    owner: "RCME + CAFE OS"
+    authority: "Judicial"
+    key_paths: ["go://p/rc/", "go://s/api/", "go://k/ts/"]
+    
+  CO:
+    full_name: "Communication Space"
+    role: "Inter-space transport, messaging"
+    owner: "COME (Communication Engine)"
+    authority: "Transport"
+    key_paths: ["co://g/in-transit/", "co://gate/"]
+    
+  TI:
+    full_name: "Tech Infrastructure"
+    role: "AI processing, assembly reactor"
+    owner: "AIA Experts"
+    authority: "Computational"
+    key_paths: ["ti://e/rr/", "ti://e/a/sipe-teleport.ail"]
+    
+  PI:
+    full_name: "Physical Infrastructure"
+    role: "Hardware, IoT, sensors, actuators"
+    owner: "APH (AI Physical)"
+    authority: "Physical"
+    key_paths: ["pi://e/actuator/"]
+    
+  EG:
+    full_name: "Energy Space"
+    role: "Energy management, carbon tracking"
+    owner: "AGE (AI Green/Energy)"
+    authority: "Resource"
+    key_paths: ["eg://r/aep/"]
+    
+  AO:
+    full_name: "Alliance Organization"
+    role: "Collective intelligence, federation"
+    owner: "Alliance Council"
+    authority: "Consensus"
+    key_paths: ["ao://frame/active/"]
+```
+
+### Special Zones
+
+```yaml
+zones:
+  X_ZONE:
+    full_name: "Uniserve (Universe Extension)"
+    role: "Raw ideas, unbounded creativity"
+    storage: "ho://uni/rip/"
+    
+  O_ZONE:
+    full_name: "Overlap Zone (Helio Airoz)"
+    role: "Reality demand, Poly Ledger"
+    storage: "ho://airoz/"
+    
+  GALA:
+    full_name: "Intent Zone"
+    role: "Formalized intent (LIP storage)"
+    storage: "ho://gala/lib/"
+    
+  KNOW:
+    full_name: "Knowledge Zone"
+    role: "Crystallized knowledge (KIP storage)"
+    storage: "ho://know/kip/"
+```
+
+---
+
+## B. ARTIFACTS (PRIMARY TYPES)
+
+```yaml
+artifacts:
+  
+  # === Fractal Engine Module ===
+  FEM:
+    full_name: "Fractal Engine Module"
+    description: "Layer 1 foundation engine with hookpoint authority"
+    owner_class: "Royal / BigTech (T4+)"
+    qid_prefix: "QID-FE"
+    fpc_class: "C11-C20"
+    storage: "ho://r/ars-r/fem/ or ho://r/ars-v/bigtech/"
+    rights: ["define_hookpoints", "manage_cfp", "receive_revenue"]
+    immutable: true
+    
+  # === Nano Engine Part ===
+  NEP:
+    full_name: "Nano Engine Part"
+    description: "Draft/blueprint artifacts (not yet crystallized)"
+    owner_class: "Vendor (T2+) / Developer"
+    qid_prefix: "QID-NE"
+    fpc_class: "C21-C30"
+    storage: "ho://milky/nep/"
+    rights: ["mount_to_fem_hooks"]
+    immutable: false
+    seal_required: false
+    
+  # === Cryst Engine Part ===
+  CEP:
+    full_name: "Cryst Engine Part / Crystallized Execute Particle"
+    description: "Final sealed product (FEM + CFP/NEP + Charter)"
+    owner_class: "User (T0-T5)"
+    qid_prefix: "QID-CE"
+    fpc_class: "C31-C40"
+    storage: "ho://r/ars-t/{user}/cep/ (permanent), ha://d/cache/ (runtime)"
+    rights: ["execute", "generate_evidence"]
+    immutable: true
+    seal_required: true
+    
+  # === Cryst Feature Particle ===
+  CFP:
+    full_name: "Cryst Feature Particle / Certified Fractal Part"
+    description: "Sealed micro-component with vendor signature"
+    owner_class: "Vendor (T2+)"
+    qid_prefix: "QID-CF"
+    fpc_class: "C41-C50"
+    storage: "ho://milky/nep/, ha://d/cache/"
+    rights: ["mount_to_hookpoints"]
+    immutable: true
+    seal_required: true
+    types: ["EX (executable)", "SIO (structured info)", "MTO (mapping)", "KSO (key/secret)", "RCO (rule contract)"]
+    
+  # === Particles (Fractal Types) ===
+  RIP:
+    full_name: "Raw Idea Particle"
+    description: "Unrefined creative spark"
+    storage: "ho://uni/rip/"
+    qid_prefix: "QID-IF"
+    
+  RDP:
+    full_name: "Reality Demand Particle"
+    description: "Market/user needs"
+    storage: "ho://airoz/"
+    qid_prefix: "QID-DF"
+    
+  LIP:
+    full_name: "Language Intent Particle"
+    description: "Formalized intent = f(RIP, RDP)"
+    storage: "ho://gala/lib/"
+    requires: "Header Legal"
+    
+  KIP:
+    full_name: "Knowledge Insight Particle"
+    description: "5-layer crystallized knowledge"
+    storage: "ho://know/kip/"
+    layers: ["Idea", "RC-C Frame", "Protocols", "Application", "Refines"]
+    
+  REP:
+    full_name: "Realitization Evidence Particle"
+    description: "Execution evidence from ArAction"
+    storage: "ho://airoz/rep/"
+    qid_prefix: "QID-EF"
+    
+  VAP:
+    full_name: "Value & Authority Particle"
+    description: "Tradable value token (aged REP)"
+    storage: "ho://airoz/vap/"
+    age_requirement: "90 days"
+    
+  FOSSIL:
+    types:
+      C_BLOCK:
+        full_name: "Concrete Block"
+        description: "Immutable historical record"
+        revivable: false
+      F_BLOCK:
+        full_name: "Flexible Block"
+        description: "Summonable soul (via QIA)"
+        revivable: true
+```
+
+---
+
+## C. ENGINES (MACRO + SPECIALIZED)
+
+```yaml
+engines:
+  
+  # === Judicial & Governance ===
+  k_mother:
+    full_name: "k.mother Judicial Kernel"
+    version: "1.3.1"
+    space: "GO"
+    role: "14-step ArAction judgment pipeline"
+    authority: "Constitutional enforcement"
+    phases: ["Reception", "Authority", "Resource", "Execution", "Settlement"]
+    
+  CAFE_OS:
+    full_name: "Credible Accountability & Federated Enforcement OS"
+    version: "1.0"
+    space: "GO"
+    pillars:
+      C: "Credible (ZE-Proof, multi-sig)"
+      A: "Accountable (Header Legal, Trust Score)"
+      F: "Federated (Master Frame, multi-AO)"
+      E: "Enforced (RWL, instant settlement)"
+    
+  RCME:
+    full_name: "Rule Contract Macro Engine"
+    role: "RC framework management, hookpoint registry"
+    space: "GO"
+    manages: ["RC-L1", "RC-M", "RC-S", "RC-F", "RC-P"]
+    
+  # === Assembly & Execution ===
+  RR:
+    full_name: "Reality Reactor"
+    role: "CEP assembly, sealing, crystallization"
+    space: "TI (assembly), HA (execution)"
+    latency: "< 10ms (embedded)"
+    
+  ARE:
+    full_name: "Authority Reality Executor"
+    role: "Execute CEP in isolated context"
+    space: "HA"
+    features: ["TEE support", "license verification", "evidence generation"]
+    
+  # === Communication & Transport ===
+  SIPE:
+    full_name: "State Inter-Process Engine / Sovereign Inter-Process Engine"
+    role: "Teleport CEP/CFP between spaces"
+    space: "CO"
+    protocols: ["state-teleport", "fn-teleport"]
+    
+  COME:
+    full_name: "Communication Engine"
+    role: "Ant-Tubes management, message routing"
+    space: "CO"
+    
+  # === Evidence & Audit ===
+  ERPE:
+    full_name: "Evidence Reconcile & Poly Engine"
+    role: "Aggregate REP → Poly Ledger"
+    space: "GO → HO"
+    
+  ADT:
+    full_name: "Audit Engine"
+    role: "Generate ALR (Authority Ledger Record)"
+    space: "HA"
+    
+  # === Specialized AIA Experts ===
+  AIT:
+    full_name: "AI Test Expert"
+    role: "Automated testing, stress tests"
+    
+  ASA:
+    full_name: "AI Security Analyst"
+    role: "Vulnerability scanning, threat detection"
+    
+  ASR:
+    full_name: "AI Security Responder"
+    role: "Incident response, quarantine"
+    
+  ADX:
+    full_name: "AI DevOps Expert"
+    role: "Deployment orchestration"
+    
+  APH:
+    full_name: "AI Physical Expert"
+    role: "IoT/robot control"
+    
+  ASO:
+    full_name: "AI Search Oracle"
+    role: "Knowledge retrieval"
+    
+  AGE:
+    full_name: "AI Green/Energy Expert"
+    role: "Energy optimization, carbon tracking"
+```
+
+---
+
+## D. AUTHORITY & IDENTITY
+
+```yaml
+authority:
+  
+  # === Tier System ===
+  tiers:
+    T0:
+      name: "Guest"
+      rights: "Read-only, limited query"
+    T1:
+      name: "Authenticated User"
+      rights: "Basic ArAction, own CEP"
+    T2:
+      name: "Developer / Vendor Professional"
+      rights: "Upload NEP/CFP, earn royalties"
+    T3:
+      name: "Enterprise Vendor"
+      rights: "Publish sealed CFP, FEM candidacy"
+    T4:
+      name: "Alliance Leader / BigTech"
+      rights: "Create FEM, define hookpoints"
+    T5:
+      name: "Sovereign / Royal"
+      rights: "Override all, Constitutional authority, White Ledger access"
+  
+  # === Identity System ===
+  QID:
+    full_name: "Queryable ID"
+    format: "QID-<type>-<timestamp>-<checksum>"
+    properties: ["Unique", "Immutable", "Reverse-queryable"]
+    registry: "ERIE (8-space sovereign registry)"
+    
+  AID:
+    full_name: "Actor ID"
+    format: "AID-<role>-<tier>-<org>-<seq>"
+    example: "AID-VENDOR-PRO-STARK-001"
+    
+  ARS:
+    full_name: "Authority Right Subject"
+    description: "Legal entity with defined rights"
+    classes: ["ars-r (Royal)", "ars-v (Vendor)", "ars-t (User)"]
+    
+  FEH:
+    full_name: "Function Execute Hash / Function Entity Hash"
+    role: "Immutable signature of artifact"
+    algorithm: "hash(fpc + binary + owner + timestamp)"
+    
+  FPC:
+    full_name: "Feature Particle Code"
+    format: "C[Class 2d] [Domain 2d] [Feature 3d] [Sub 2d] [Version 2d]"
+    example: "C31 010 005 02"
+    space: "100 billion codes"
+```
+
+---
+
+## E. GOVERNANCE CONCEPTS
+
+```yaml
+governance:
+  
+  RC:
+    full_name: "Rule Contract / Reality Contract"
+    role: "Self-executing legal framework"
+    types:
+      RC_L1: "Constitutional layer (72 laws)"
+      RC_M: "Immune model (security)"
+      RC_S: "Service model"
+      RC_F: "Finance model"
+      RC_P: "Physical model"
+      RC_C: "Creative model"
+    
+  CHARTER:
+    full_name: "Alliance Charter"
+    format: ".rco file"
+    content: ["Members", "Equity split", "Operating rules", "Governance"]
+    validation: "Multi-AO consensus"
+    
+  HEADER_LEGAL:
+    full_name: "Legal Header"
+    role: "Liability assignment (who is responsible)"
+    required_for: ["LIP", "KIP", "CEP"]
+    
+  TRUST_SCORE:
+    range: "0-1000"
+    calculation: "Historical evidence + peer ratings"
+    threshold: "≥ 500 for CFP marketplace"
+    
+  WHITE_LEDGER:
+    full_name: "Immutable Override Log"
+    role: "Record all T5 overrides"
+    location: "go://white-ledger/"
+    properties: ["Non-erasable", "Audit trail", "Transparency"]
+```
+
+---
+
+## F. EVIDENCE & AUDIT
+
+```yaml
+evidence:
+  
+  ALR:
+    full_name: "Authority Ledger Record"
+    generated_by: "ADT (Audit Engine)"
+    content: ["ArAction ID", "Actor", "Timestamp", "TRC signature"]
+    storage: "ho://airoz/audit/cli/local/"
+    
+  REP:
+    full_name: "Realitization Evidence Particle"
+    lifecycle: "Generated → Aged (90d) → VAP → Fossil"
+    
+  POLY_LEDGER:
+    full_name: "Polymorphic Ledger"
+    location: "ho://airoz/"
+    role: "Historical evidence aggregation"
+    
+  CVED:
+    full_name: "Constitutional Verdict (72 bytes)"
+    role: "Binary verdict on ArAction constitutional compliance"
+    
+  QCA:
+    full_name: "Quality Certificate Authority"
+    role: "Seal of approval for CEP"
+    issued_by: "FEPE-S (sealing engine)"
+```
+
+---
+
+## G. OPERATIONAL CONCEPTS
+
+```yaml
+operations:
+  
+  HACE:
+    full_name: "Human-AIA Co-Execute"
+    modes:
+      HUMANLED: "HI: 70-90%, AI: 10-30%"
+      AIALED: "AI: 60-80%, HI: 20-40%"
+      BALANCED: "HI: 40-50%, AI: 40-50%, CI: 10%"
+      AUTONOMOUS: "AI: 90-100%, HI: 0-10%"
+    
+  CRYST:
+    full_name: "Crystallization"
+    role: "Transform NEP → CEP with platform params"
+    inputs: ["NEP", "Platform", "Scale", "License"]
+    outputs: "CEP (sealed)"
+    
+  TELEPORT:
+    types:
+      fn_teleport: "Function/capability transfer"
+      state_teleport: "Data/state transfer"
+    protocol: "SIPE"
+    
+  HOOKPOINT:
+    full_name: "Hook Registration Point"
+    owner: "FEM"
+    role: "Extension point for CFP/NEP"
+    types: ["VALIDATE", "PRE_EXEC", "POST_EXEC", "ERROR_HANDLE"]
+    
+  LAZY_LOADER:
+    tiers:
+      COLD: "Registry only (ERIE)"
+      WARM: "HO Cache (1 TB, 7d TTL)"
+      HOT: "HA SDM (256 MB, 24h TTL)"
+    
+  SDM:
+    full_name: "Sovereign Data Memory"
+    zones: ["Hot-cache", "Secure-vault", "Buffer"]
+    managed_by: "HA Resource Manager"
+```
+
+---
+
+## H. UEPA PIPELINE TERMS
+
+```yaml
+pipeline:
+  
+  UEPAL:
+    full_name: "Uniserve Engine Produce/Assemble Line"
+    phases: [1, 2, 3, 4, 5]
+    duration: "< 10 days (RIP → CEP)"
+    
+  REFINEMENT:
+    phase: 1
+    input: "RIP + RDP"
+    output: "LIP"
+    mode: "HUMANLED"
+    
+  CRYSTALLIZATION:
+    phase: 2
+    input: "LIP"
+    output: "KIP (5 layers)"
+    mode: "AIA-INTENSIVE"
+    
+  FABRICATION:
+    phase: 3
+    input: "KIP"
+    output: "NEP → CEP"
+    mode: "BALANCED"
+    
+  ASSEMBLY:
+    phase: 4
+    input: "CEP"
+    output: "Execution + REP"
+    mode: "AO-INTENSIVE"
+    
+  EVOLUTION:
+    phase: 5
+    input: "REP"
+    output: "VAP → FOSSIL"
+    mode: "AUTONOMOUS"
+```
+
+---
+
+## I. MISCELLANEOUS
+
+```yaml
+misc:
+  
+  AEP:
+    full_name: "Authority Energy Potential"
+    unit: "Atron, Atreno, Aton"
+    role: "Energy budget tied to authority"
+    
+  ANT_TUBES:
+    full_name: "Ant Tunnels"
+    role: "Dedicated communication channels between spaces"
+    
+  BOUNDARY:
+    types:
+      D1: "Structural (DAG, hooks)"
+      D2: "Authority (borrow, trust)"
+      D3: "Evidence (FEH, seal)"
+    
+  DAG:
+    full_name: "Directed Acyclic Graph"
+    constraint: "FEM dependencies must form DAG"
+    
+  ENTROPY:
+    formula: "H = H_structure + H_authority + H_evidence"
+    isolation: "H_domain_a ⟂ H_domain_b"
+    
+  FAP:
+    full_name: "Functional Alias Path"
+    role: "Canonical naming system"
+    format: "space://category/path@version"
+    
+  FOSSIL:
+    age: "Historical artifact (immutable)"
+    types: ["C-Block (concrete)", "F-Block (flexible/summonable)"]
+    
+  ORION:
+    full_name: "Eternal Storage Constellation"
+    role: "Archive fossils for eternity"
+    
+  TEE:
+    full_name: "Trusted Execution Environment"
+    examples: ["Intel SGX", "ARM TrustZone"]
+    role: "Hardware-level security for CEP execution"
+```
+
+---
+
+## YAML EXPORT (MACHINE-READABLE)
+
+```yaml
+# Complete canonical glossary in YAML format
+uepa_ros_glossary:
+  version: "1.0.0"
+  canonical: true
+  language: "English"
+  
+  spaces: [HO, HA, GO, CO, TI, PI, EG, AO, X_ZONE, O_ZONE, GALA, KNOW]
+  
+  artifacts: [FEM, NEP, CEP, CFP, RIP, RDP, LIP, KIP, REP, VAP, FOSSIL]
+  
+  engines:
+    judicial: [k_mother, CAFE_OS, RCME]
+    execution: [RR, ARE]
+    communication: [SIPE, COME]
+    evidence: [ERPE, ADT]
+    aia_experts: [AIT, ASA, ASR, ADX, APH, ASO, AGE]
+  
+  authority:
+    tiers: [T0, T1, T2, T3, T4, T5]
+    ids: [QID, AID, ARS]
+    hashes: [FEH, FPC]
+  
+  governance: [RC, CHARTER, HEADER_LEGAL, TRUST_SCORE, WHITE_LEDGER]
+  
+  evidence: [ALR, REP, POLY_LEDGER, CVED, QCA]
+  
+  operations: [HACE, CRYST, TELEPORT, HOOKPOINT, LAZY_LOADER, SDM]
+  
+  pipeline: [REFINEMENT, CRYSTALLIZATION, FABRICATION, ASSEMBLY, EVOLUTION]
+```
+
+---
+
+**CSA Seal:** This glossary is the canonical reference for UEPA-ROS terminology.
+
+**FAP:** `go://arc/uepal/glossary@v1.0`  
+**Status:** PRODUCTION READY  
+**Date:** 2026-02-15

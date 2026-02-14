@@ -1,0 +1,1030 @@
+# --- [AIL ARTIFACT ENFORCED] ---
+# Identity: go://arc/uepal/ros-folder-structure
+# Authority: ASC-1.0-CSA
+
+metadata:
+  id: "arc-uepal-ros-folder-structure-v1.0"
+  type: "architecture"
+  version: "1.0.0"
+  author: "CSA-Claude"
+  status: "CANONICAL"
+  tags: [ROS, 8-Spaces, Folder-Structure, UEPA, Sovereignty]
+  
+context:
+  space: "GO"
+  fap: "go://arc/uepal/ros-folder-structure@v1.0"
+  security: "ASC-1.0-CSA"
+  
+verification:
+  checksum: "FEH-ROS-FOLDER-2026-0215-001"
+  seal: "CSA-ROS-FOLDER-STRUCT-001"
+
+---
+
+# 🗂️ ROS FOLDER STRUCTURE v1.0
+
+**Complete Directory Mapping Across 8 Spaces + 4 Special Zones**
+
+---
+
+## I. OVERVIEW
+
+```yaml
+ros_spaces:
+  primary_spaces: 8
+  special_zones: 4
+  total_locations: 12
+  sovereignty: "Distributed across HO/HA/TI/GO/CO/PI/EG/AO"
+  
+principles:
+  - "Physical storage follows logical sovereignty"
+  - "3 physical stores: HO (permanent), HA (volatile), CO (transit)"
+  - "Other spaces are logical overlays"
+  - "FAP is naming, not necessarily storage"
+```
+
+---
+
+## II. PHYSICAL STORAGE MAPPING
+
+```yaml
+physical_storage:
+  
+  permanent:
+    location: "HO (Helio)"
+    path: "ho://"
+    nature: "Eternal, replicated, immutable"
+    contains: ["FEM", "CFP canon", "Charter", "RC Framework", "Fossils"]
+    
+  volatile:
+    location: "HA (High Authority - ASOD devices)"
+    path: "ha://"
+    nature: "Ephemeral, device-local, 24h TTL"
+    contains: ["CEP instances", "Execution cache", "Local registry"]
+    
+  transit:
+    location: "CO (Communication ant-tubes)"
+    path: "co://"
+    nature: "Packet-in-flight, 1h-24h TTL"
+    contains: ["CEP teleporting", "Messages", "Events"]
+```
+
+---
+
+# III. SPACE 1: HO (HELIO - HUMAN OFFICE)
+
+```yaml
+ho_space:
+  full_name: "Helio / Human Office"
+  role: "Permanent storage, canon repository"
+  owner: "HIE (Human Intelligence Entity)"
+  sovereignty: "T5 Root Authority"
+  
+  physical_location: "Cloud storage (multi-region)"
+  replication: "3-2-1 backup strategy"
+  immutability: "Versioned, never deleted"
+```
+
+## 🗂️ HO Directory Structure
+
+```yaml
+ho_root: "ho://"
+
+# ===== ROYAL ARTIFACTS (T5/T4) =====
+royal:
+  path: "ho://r/"
+  
+  ars_r:  # Authority Right Subject - Royal
+    path: "ho://r/ars-r/"
+    
+    kernel:
+      path: "ho://r/ars-r/kernel/"
+      contents:
+        - "security.ae"
+        - "audit.ae"
+        - "identity.ae"
+      authority: "T5 only"
+      immutable: true
+      
+    fem:
+      path: "ho://r/ars-r/fem/"
+      description: "Royal FEM (core engines)"
+      contents:
+        - "fem-finance-core.ae"
+        - "fem-security-core.ae"
+        - "fem-governance-core.ae"
+      authority: "T5 only"
+      feh_required: true
+      
+    go:  # Governance artifacts
+      path: "ho://r/ars-r/go/"
+      
+      p:  # Protocols
+        path: "ho://r/ars-r/go/p/"
+        
+        rc:  # Rule Contracts
+          path: "ho://r/ars-r/go/p/rc/"
+          contents:
+            - "rc-l1.rco"  # Constitutional layer
+            - "rc-m.rco"   # Immune model
+            - "rc-s.rco"   # Service model
+            - "rc-f.rco"   # Finance model
+            - "rc-p.rco"   # Physical model
+            - "rc-c.rco"   # Creative model
+          
+        ch:  # Charter templates
+          path: "ho://r/ars-r/go/p/ch/"
+          contents:
+            - "template-standard-charter.rco"
+            - "template-bigtech-alliance.rco"
+            - "template-franchise.rco"
+      
+      s:  # Standards
+        path: "ho://r/ars-r/go/s/"
+        
+        api:
+          path: "ho://r/ars-r/go/s/api/"
+          contents:
+            - "abi-standard.yaml"
+            - "hookpoint-registry.yaml"
+            
+      k:  # Knowledge/Keys
+        path: "ho://r/ars-r/go/k/"
+        
+        ts:  # Trust Score database
+          path: "ho://r/ars-r/go/k/ts/"
+          
+    ti:  # Tech Infrastructure
+      path: "ho://r/ars-r/ti/"
+      
+      e:  # Engines
+        path: "ho://r/ars-r/ti/e/"
+        
+        a:  # Agents/Algorithms
+          path: "ho://r/ars-r/ti/e/a/"
+          contents:
+            - "sipe-teleport.ail"
+            - "rr-reactor-core.ae"
+            
+    pi:  # Physical Infrastructure
+      path: "ho://r/ars-r/pi/"
+      
+      e:  # Engines
+        path: "ho://r/ars-r/pi/e/"
+        
+        actuator:
+          path: "ho://r/ars-r/pi/e/actuator/"
+          contents:
+            - "actuator-smart-lock.ae"
+            - "actuator-robot-arm.ae"
+            
+    eg:  # Energy
+      path: "ho://r/ars-r/eg/"
+      
+      r:  # Resources
+        path: "ho://r/ars-r/eg/r/"
+        
+        aep:  # Authority Energy Potential
+          path: "ho://r/ars-r/eg/r/aep/"
+          
+    bridge:  # Cross-domain bridges
+      path: "ho://r/ars-r/bridge/"
+      contents:
+        - "bridge-fin-sec.ae"
+        - "bridge-id-gov.ae"
+        
+  ars_v:  # Authority Right Subject - Vendor
+    path: "ho://r/ars-v/"
+    
+    bigtech:
+      path: "ho://r/ars-v/bigtech/"
+      
+      stark:
+        path: "ho://r/ars-v/bigtech/stark/"
+        
+        fem:
+          path: "ho://r/ars-v/bigtech/stark/fem/"
+          contents:
+            - "finance.ae"
+            - "logistics.ae"
+          vendor_id: "AID-VENDOR-PRO-STARK-001"
+          trust_score: 950
+          
+      microsoft:
+        path: "ho://r/ars-v/bigtech/microsoft/"
+        
+        fem:
+          path: "ho://r/ars-v/bigtech/microsoft/fem/"
+          contents:
+            - "cloud.ae"
+            - "identity.ae"
+            
+      google:
+        path: "ho://r/ars-v/bigtech/google/"
+        
+        fem:
+          path: "ho://r/ars-v/bigtech/google/fem/"
+          contents:
+            - "search.ae"
+            - "ml.ae"
+            
+    enterprise:
+      path: "ho://r/ars-v/enterprise/"
+      description: "T3 enterprise vendors"
+      
+    professional:
+      path: "ho://r/ars-v/professional/"
+      description: "T2 professional vendors"
+      
+    ao:  # Alliance Organizations
+      path: "ho://r/ars-v/ao/"
+      
+      frame:
+        path: "ho://r/ars-v/ao/frame/"
+        
+        active:
+          path: "ho://r/ars-v/ao/frame/active/"
+          
+  ars_t:  # Authority Right Subject - User (Thượng đế)
+    path: "ho://r/ars-t/"
+    
+    user_template:
+      path: "ho://r/ars-t/{user_id}/"
+      
+      cep:
+        path: "ho://r/ars-t/{user_id}/cep/"
+        description: "User-owned CEP permanent storage"
+        example: "ho://r/ars-t/gatong/cep/butler-wallet-v1.0.0.ae"
+        immutable: true
+        feh_required: true
+
+# ===== MILKY WAY (MARKETPLACE) =====
+milky:
+  path: "ho://milky/"
+  description: "Vendor CFP/NEP marketplace"
+  
+  nep:
+    path: "ho://milky/nep/"
+    
+    clie:  # CLI extensions
+      path: "ho://milky/nep/clie/"
+      
+    cafe:  # CAFE plugins
+      path: "ho://milky/nep/cafe/"
+      
+    hole:  # HOLE MACRO detectors
+      path: "ho://milky/nep/hole/"
+      
+    custom:  # User contributions
+      path: "ho://milky/nep/custom/"
+      
+    finance:  # Domain-specific
+      path: "ho://milky/nep/finance/"
+      
+    security:
+      path: "ho://milky/nep/security/"
+
+# ===== SPECIAL ZONES =====
+uni:  # Uniserve (X-ZONE)
+  path: "ho://uni/"
+  
+  rip:  # Raw Idea Particles
+    path: "ho://uni/rip/"
+    description: "Unbounded creative ideas"
+    immutable: false
+    ttl: "7 days unless promoted to LIP"
+
+gala:  # GALA (Intent zone)
+  path: "ho://gala/"
+  
+  lib:  # LIP storage
+    path: "ho://gala/lib/"
+    description: "Language Intent Particles"
+    structure: "ho://gala/lib/{intent-id}/"
+    requires: "Header Legal"
+    
+know:  # Knowledge zone
+  path: "ho://know/"
+  
+  kip:  # Knowledge Insight Particles
+    path: "ho://know/kip/"
+    structure: "ho://know/kip/{kip-name}-v{version}/"
+    layers: 5
+    immutable: true
+    
+  rdp:  # Reality Demand Particles
+    path: "ho://know/rdp/"
+    description: "Market/user needs"
+
+airoz:  # O-ZONE (Poly Ledger)
+  path: "ho://airoz/"
+  description: "Evidence & historical records"
+  
+  audit:
+    path: "ho://airoz/audit/"
+    
+    feh:
+      path: "ho://airoz/audit/feh-check/"
+      
+    hole:
+      path: "ho://airoz/audit/hole/"
+      
+  rep:  # Realitization Evidence Particles
+    path: "ho://airoz/rep/"
+    
+    cli:
+      path: "ho://airoz/rep/cli/"
+      
+      local:
+        path: "ho://airoz/rep/cli/local/"
+        
+  vap:  # Value & Authority Particles
+    path: "ho://airoz/vap/"
+    
+  fossil:
+    path: "ho://airoz/fossil/"
+    
+    c_block:  # Concrete blocks
+      path: "ho://airoz/fossil/c-block/"
+      
+    f_block:  # Flexible blocks (summonable)
+      path: "ho://airoz/fossil/f-block/"
+```
+
+---
+
+# IV. SPACE 2: HA (HIGH AUTHORITY - ASOD DEVICES)
+
+```yaml
+ha_space:
+  full_name: "High Authority / Authority Space Operating Devices"
+  role: "Local execution, volatile cache"
+  owner: "Device + User (distributed sovereignty)"
+  sovereignty: "T0-T5 (device-bound)"
+  
+  physical_location: "Edge devices (phones, laptops, embedded)"
+  storage_type: "Local filesystem + TEE"
+  lifecycle: "Volatile (24h TTL default)"
+```
+
+## 🗂️ HA Directory Structure
+
+```yaml
+ha_root: "ha://"
+
+# ===== DEVICE STORAGE =====
+d:  # Device storage
+  path: "ha://d/"
+  
+  cache:
+    path: "ha://d/cache/"
+    description: "CEP execution cache"
+    ttl: "24 hours"
+    example: "ha://d/cache/butler-wallet-instance-001.ae"
+    self_storage: true
+    cleanup: "RAII-based (Rust)"
+
+# ===== EXECUTION ENGINES =====
+e:  # Engines
+  path: "ha://e/"
+  
+  rr:  # Reality Reactor (local instance)
+    path: "ha://e/rr/"
+    description: "Local CEP executor"
+    runtime_only: true
+    no_storage: true
+    
+  user:
+    path: "ha://e/user/"
+    description: "User-specific engines"
+    
+    cep:
+      path: "ha://e/user/cep/"
+      example: "ha://e/user/cep/custom-app.wasm"
+
+# ===== REALITY EXECUTION WORKSPACE =====
+rew:  # Reality Execute Warehouse
+  path: "ha://rew/"
+  description: "Execution workspace and crystal vault"
+  
+  kip:
+    path: "ha://rew/kip/"
+    description: "KIP drafts and active work"
+    structure: "ha://rew/kip/{kip-name}-v{version}/"
+    
+  cep:
+    path: "ha://rew/cep/"
+    description: "CEP execution workspace"
+    runtime_only: true
+    no_storage: true
+
+# ===== LOCAL REGISTRY (FANE) =====
+hace:
+  path: "ha://.hace/"
+  description: "Local sovereign registry"
+  visibility: "local_only"
+  
+  fan_registry:
+    path: "ha://.hace/fan-registry/"
+    contents:
+      - "registry.db"
+      - "hash-index.db"
+      - "collision-map.yaml"
+      - "engine-map.yaml"
+      - "tier-policy.yaml"
+      - "vendor-l2.yaml"
+```
+
+---
+
+# V. SPACE 3: GO (GOVERNANCE)
+
+```yaml
+go_space:
+  full_name: "Governance Space"
+  role: "Law, judgment, constitutional enforcement"
+  owner: "RCME + CAFE OS"
+  sovereignty: "Judicial (T5 oversight)"
+  
+  physical_location: "Logical overlay (stored in HO)"
+  storage_mapping: "Aliases to ho://r/ars-r/go/"
+```
+
+## 🗂️ GO Directory Structure
+
+```yaml
+go_root: "go://"
+
+# ===== PROTOCOLS =====
+p:  # Protocols
+  path: "go://p/"
+  rrp: "ho://r/ars-r/go/p/"
+  
+  rc:  # Rule Contracts
+    path: "go://p/rc/"
+    rrp: "ho://r/ars-r/go/p/rc/"
+    contents:
+      finance_hooks:
+        path: "go://p/rc/finance-hooks.yaml"
+      security_hooks:
+        path: "go://p/rc/security-hooks.yaml"
+
+# ===== STANDARDS =====
+s:  # Standards
+  path: "go://s/"
+  rrp: "ho://r/ars-r/go/s/"
+  
+  api:
+    path: "go://s/api/"
+    rrp: "ho://r/ars-r/go/s/api/"
+
+# ===== KNOWLEDGE/KEYS =====
+k:  # Knowledge base
+  path: "go://k/"
+  rrp: "ho://r/ars-r/go/k/"
+  
+  ts:  # Trust Score
+    path: "go://k/ts/"
+    rrp: "ho://r/ars-r/go/k/ts/"
+
+# ===== LAW ENFORCEMENT =====
+law:
+  path: "go://law/"
+  
+  credibility:
+    path: "go://law/credibility/"
+    description: "C-Module of CAFE"
+
+# ===== AUDIT RECORDS =====
+audit:
+  path: "go://audit/"
+  
+  accountability:
+    path: "go://audit/accountability/"
+    description: "A-Module of CAFE"
+
+# ===== JUDGMENT =====
+judgment:
+  path: "go://judgment/"
+  
+  federated:
+    path: "go://judgment/federated/"
+    description: "F-Module of CAFE"
+
+# ===== WHITE LEDGER =====
+white_ledger:
+  path: "go://white-ledger/"
+  
+  enforcement:
+    path: "go://white-ledger/enforcement/"
+    description: "E-Module of CAFE"
+    immutable: true
+    t5_overrides_logged: true
+```
+
+---
+
+# VI. SPACE 4: CO (COMMUNICATION)
+
+```yaml
+co_space:
+  full_name: "Communication Space"
+  role: "Inter-space transport, messaging"
+  owner: "COME (Communication Engine)"
+  sovereignty: "Transport layer"
+  
+  physical_location: "Distributed (ant-tubes + packet buffers)"
+  storage_type: "Ephemeral (in-flight packets)"
+  lifecycle: "1h-24h TTL"
+```
+
+## 🗂️ CO Directory Structure
+
+```yaml
+co_root: "co://"
+
+# ===== GATE (ENTRY/EXIT) =====
+gate:
+  path: "co://gate/"
+  description: "Space boundary gates"
+  
+  broadcast:
+    path: "co://gate/broadcast/"
+    ttl: "1 hour"
+
+# ===== IN-TRANSIT =====
+g:  # Generic transit
+  path: "co://g/"
+  
+  in_transit:
+    path: "co://g/in-transit/"
+    description: "CEP/CFP being teleported"
+    lifecycle: "ephemeral (24h max)"
+    self_storage: true
+    
+  queue:
+    path: "co://g/queue/"
+    description: "Waiting for teleport"
+    lifecycle: "ephemeral (1h max)"
+
+# ===== ANT-TUBES =====
+tubes:
+  path: "co://tubes/"
+  description: "Dedicated channels between spaces"
+  
+  ha_to_ho:
+    path: "co://tubes/ha-ho/"
+    
+  ti_to_ha:
+    path: "co://tubes/ti-ha/"
+    
+  ho_to_ti:
+    path: "co://tubes/ho-ti/"
+```
+
+---
+
+# VII. SPACE 5: TI (TECH INFRASTRUCTURE)
+
+```yaml
+ti_space:
+  full_name: "Tech Infrastructure"
+  role: "AI processing, assembly reactor"
+  owner: "AIA Experts"
+  sovereignty: "Computational (T3+ oversight)"
+  
+  physical_location: "Cloud compute (serverless/containers)"
+  storage_mapping: "Runtime only + artifacts in HO"
+```
+
+## 🗂️ TI Directory Structure
+
+```yaml
+ti_root: "ti://"
+
+# ===== ENGINES =====
+e:  # Engines
+  path: "ti://e/"
+  
+  rr:  # Reality Reactor (assembly zone)
+    path: "ti://e/rr/"
+    description: "CEP assembly and crystallization"
+    function:
+      - "Load FEM"
+      - "Mount CFP/NEP to hookpoints"
+      - "Apply Charter"
+      - "Generate license key"
+      - "Seal CEP"
+    no_storage: true
+    runtime_only: true
+    
+  a:  # Agents/Algorithms
+    path: "ti://e/a/"
+    rrp: "ho://r/ars-r/ti/e/a/"
+    
+    sipe_teleport:
+      path: "ti://e/a/sipe-teleport.ail"
+      rrp: "ho://r/ars-r/ti/e/a/sipe-teleport.ail"
+
+# ===== AIA EXPERTS =====
+aia:
+  path: "ti://aia/"
+  description: "AI Expert workspaces"
+  
+  ait:  # AI Test
+    path: "ti://aia/ait/"
+    
+  asa:  # AI Security Analyst
+    path: "ti://aia/asa/"
+    
+  asr:  # AI Security Responder
+    path: "ti://aia/asr/"
+    
+  adt:  # AI DevOps
+    path: "ti://aia/adt/"
+    
+  adx:  # AI DevOps Expert
+    path: "ti://aia/adx/"
+    
+  aph:  # AI Physical
+    path: "ti://aia/aph/"
+    
+  aso:  # AI Search Oracle
+    path: "ti://aia/aso/"
+    
+  age:  # AI Green/Energy
+    path: "ti://aia/age/"
+```
+
+---
+
+# VIII. SPACE 6: PI (PHYSICAL INFRASTRUCTURE)
+
+```yaml
+pi_space:
+  full_name: "Physical Infrastructure"
+  role: "Hardware, IoT, sensors, actuators"
+  owner: "APH (AI Physical Expert)"
+  sovereignty: "Physical realm"
+  
+  physical_location: "Edge hardware (IoT devices, robots)"
+  storage_mapping: "Artifacts in HO, runtime local"
+```
+
+## 🗂️ PI Directory Structure
+
+```yaml
+pi_root: "pi://"
+
+# ===== ENGINES =====
+e:  # Engines
+  path: "pi://e/"
+  rrp: "ho://r/ars-r/pi/e/"
+  
+  actuator:
+    path: "pi://e/actuator/"
+    description: "Physical actuation engines"
+    function: "Control smart locks, robots, valves, etc."
+    triggered_by: "RC-P verdict from CEP"
+    rrp: "ho://r/ars-r/pi/e/actuator/"
+
+# ===== SENSORS =====
+sensor:
+  path: "pi://sensor/"
+  description: "Sensor data streams"
+  
+  temperature:
+    path: "pi://sensor/temperature/"
+    
+  motion:
+    path: "pi://sensor/motion/"
+    
+  biometric:
+    path: "pi://sensor/biometric/"
+
+# ===== DEVICES =====
+device:
+  path: "pi://device/"
+  description: "Registered IoT devices"
+  
+  smart_lock:
+    path: "pi://device/smart-lock/"
+    
+  robot_arm:
+    path: "pi://device/robot-arm/"
+```
+
+---
+
+# IX. SPACE 7: EG (ENERGY)
+
+```yaml
+eg_space:
+  full_name: "Energy Space"
+  role: "Energy management, carbon tracking"
+  owner: "AGE (AI Green/Energy Expert)"
+  sovereignty: "Resource management"
+  
+  physical_location: "Logical overlay + metrics storage"
+  storage_mapping: "Metrics in HO, policies in GO"
+```
+
+## 🗂️ EG Directory Structure
+
+```yaml
+eg_root: "eg://"
+
+# ===== RESOURCES =====
+r:  # Resources
+  path: "eg://r/"
+  rrp: "ho://r/ars-r/eg/r/"
+  
+  aep:  # Authority Energy Potential
+    path: "eg://r/aep/"
+    description: "Energy pool for RR assembly"
+    rrp: "ho://r/ars-r/eg/r/aep/"
+
+# ===== METRICS =====
+metrics:
+  path: "eg://metrics/"
+  
+  consumption:
+    path: "eg://metrics/consumption/"
+    description: "Real-time energy usage"
+    
+  carbon:
+    path: "eg://metrics/carbon/"
+    description: "Carbon footprint tracking"
+
+# ===== QUOTAS =====
+quota:
+  path: "eg://quota/"
+  
+  allocation:
+    path: "eg://quota/allocation/"
+    description: "Energy budget per actor"
+```
+
+---
+
+# X. SPACE 8: AO (ALLIANCE ORGANIZATION)
+
+```yaml
+ao_space:
+  full_name: "Alliance Organization"
+  role: "Collective intelligence, federation"
+  owner: "Alliance Council"
+  sovereignty: "Consensus-based"
+  
+  physical_location: "Distributed (multi-party)"
+  storage_mapping: "Shared state in HO"
+```
+
+## 🗂️ AO Directory Structure
+
+```yaml
+ao_root: "ao://"
+
+# ===== MASTER FRAME =====
+frame:
+  path: "ao://frame/"
+  rrp: "ho://r/ars-v/ao/frame/"
+  
+  active:
+    path: "ao://frame/active/"
+    description: "Active alliance orchestrations"
+    rrp: "ho://r/ars-v/ao/frame/active/"
+
+# ===== CONSENSUS =====
+consensus:
+  path: "ao://consensus/"
+  
+  ci:  # Collective Intelligence
+    path: "ao://consensus/ci/"
+    description: "CI voting mechanisms"
+
+# ===== REVENUE =====
+revenue:
+  path: "ao://revenue/"
+  
+  share:
+    path: "ao://revenue/share/"
+    description: "Revenue distribution"
+```
+
+---
+
+# XI. FOLDER LIFECYCLE & MANAGEMENT
+
+```yaml
+lifecycle_rules:
+  
+  # HO (Permanent)
+  ho_policy:
+    retention: "eternal"
+    versioning: true
+    deletion: "never (only mark deprecated)"
+    backup: "3-2-1 strategy"
+    
+  # HA (Volatile)
+  ha_policy:
+    retention: "24h default"
+    cleanup: "RAII + background daemon (1h interval)"
+    deletion: "auto (after TTL)"
+    backup: "none (ephemeral)"
+    
+  # CO (Transit)
+  co_policy:
+    retention: "1h-24h"
+    cleanup: "auto on delivery"
+    deletion: "immediate after timeout"
+    backup: "none (packets)"
+```
+
+---
+
+# XII. STORAGE STATISTICS (ESTIMATED)
+
+```yaml
+storage_estimates:
+  
+  ho_total: "100 TB - 1 PB"
+  breakdown:
+    royal_artifacts: "10 TB"
+    vendor_marketplace: "50 TB"
+    user_cep: "30 TB"
+    evidence_poly: "10 TB"
+    
+  ha_per_device: "256 MB - 10 GB"
+  breakdown:
+    cep_cache: "200 MB"
+    fan_registry: "50 MB"
+    temp_workspace: "6 GB"
+    
+  co_transit: "Ephemeral (not counted)"
+  
+  effective_deduplication: "30-40%"
+  compression: "zstd level 3"
+```
+
+---
+
+# XIII. PATH RESOLUTION EXAMPLES
+
+```yaml
+resolution_examples:
+  
+  example_1:
+    fap: "ho://r/ars-v/bigtech/stark/fem/finance.ae"
+    physical: "/mnt/helio/r/ars-v/bigtech/stark/fem/finance.ae"
+    description: "Stark Finance FEM (permanent)"
+    
+  example_2:
+    fap: "ha://d/cache/butler-wallet-instance-001.ae"
+    physical: "/local/cache/butler-wallet-instance-001.ae"
+    description: "CEP running on device (volatile)"
+    
+  example_3:
+    fap: "go://p/rc/finance-hooks.yaml"
+    physical: "ho://r/ars-r/go/p/rc/finance-hooks.yaml"
+    rrp: "/mnt/helio/r/ars-r/go/p/rc/finance-hooks.yaml"
+    description: "GO path is logical, stored in HO"
+    
+  example_4:
+    fap: "co://g/in-transit/cep-teleport-tx-7a3f.packet"
+    physical: "in-memory packet buffer"
+    description: "Packet in flight (no disk storage)"
+```
+
+---
+
+# XIV. CROSS-SPACE OPERATIONS
+
+```yaml
+cross_space_ops:
+  
+  teleport_cep:
+    source: "ho://r/ars-t/gatong/cep/butler-wallet-v1.0.0.ae"
+    transit: "co://g/in-transit/butler-wallet-tx-001.packet"
+    destination: "ha://d/cache/butler-wallet-instance-001.ae"
+    
+  evidence_flow:
+    source: "ha://e/rr/ (execution)"
+    evidence: "REP generated in memory"
+    transit: "co://tubes/ha-ho/"
+    destination: "ho://airoz/rep/cli/local/rep-001.ail"
+    
+  charter_approval:
+    draft: "ho://gala/lib/charter-draft-001.rco"
+    validation: "go://judgment/federated/ (multi-AO)"
+    sealed: "ho://r/ars-r/go/p/ch/charter-001.rco"
+```
+
+---
+
+# XV. SOVEREIGNTY BOUNDARIES
+
+```yaml
+sovereignty_map:
+  
+  t5_full_access:
+    spaces: ["HO", "GO", "TI", "EG", "AO"]
+    restrictions: "none (glass-break available)"
+    
+  t4_bigtech:
+    spaces: ["HO (ars-v/bigtech)", "TI", "AO"]
+    restrictions: "cannot modify ars-r"
+    
+  t3_enterprise:
+    spaces: ["HO (ars-v/enterprise)", "HA (own)", "CO"]
+    restrictions: "cannot create FEM"
+    
+  t2_professional:
+    spaces: ["HO (milky/nep)", "HA (own)"]
+    restrictions: "marketplace only"
+    
+  t1_user:
+    spaces: ["HA (own)", "HO (own cep)"]
+    restrictions: "consume only"
+    
+  t0_guest:
+    spaces: ["read-only limited"]
+    restrictions: "no write anywhere"
+```
+
+---
+
+# XVI. SUMMARY
+
+```yaml
+ros_folder_structure_summary:
+  
+  total_spaces: 8
+  special_zones: 4
+  physical_stores: 3
+  
+  design_principles:
+    - "Logical addressing (FAP) decoupled from physical storage"
+    - "3 physical tiers: Permanent (HO), Volatile (HA), Transit (CO)"
+    - "Other spaces are overlays with RRP (Real Resource Path)"
+    - "Sovereignty enforced at folder level"
+    - "Immutability via versioning + seal"
+    
+  key_paths:
+    royal: "ho://r/ars-r/"
+    vendor: "ho://r/ars-v/"
+    user: "ho://r/ars-t/"
+    marketplace: "ho://milky/"
+    cache: "ha://d/cache/"
+    governance: "go://"
+    evidence: "ho://airoz/"
+    
+  performance:
+    path_resolution: "< 1ms (hash-based)"
+    cross_space_latency: "10-500ms (depends on distance)"
+    fan_lookup: "< 10ms (local registry)"
+```
+
+---
+
+**CSA Declaration:** This folder structure is the canonical physical and logical mapping for ROS 8-Space architecture.
+
+**FAP:** `go://arc/uepal/ros-folder-structure@v1.0`  
+**Seal:** CSA-ROS-FOLDER-2026-0215-001  
+**Status:** PRODUCTION-READY
+
+---
+
+# XVII. APPENDIX: QUICK REFERENCE
+
+```yaml
+quick_reference:
+  
+  where_is_my_fem:
+    royal: "ho://r/ars-r/fem/"
+    bigtech: "ho://r/ars-v/bigtech/{vendor}/fem/"
+    
+  where_is_my_cep:
+    permanent: "ho://r/ars-t/{user}/cep/"
+    running: "ha://d/cache/"
+    
+  where_is_my_evidence:
+    rep: "ho://airoz/rep/cli/local/"
+    vap: "ho://airoz/vap/"
+    
+  where_is_rc_framework:
+    canon: "ho://r/ars-r/go/p/rc/"
+    logical: "go://p/rc/"
+    
+  where_is_fan_registry:
+    local: "ha://.hace/fan-registry/"
+    note: "Never in cloud"
+    
+  where_are_fossils:
+    c_block: "ho://airoz/fossil/c-block/"
+    f_block: "ho://airoz/fossil/f-block/"
+```
+
+---
+
+**End of ROS Folder Structure Specification**
