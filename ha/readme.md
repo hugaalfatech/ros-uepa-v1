@@ -2,6 +2,5 @@
 
 Thư mục này đại diện cho HA (High Authority Devices) trong ROS folder structure.
 
-Index đầy đủ cấu trúc:  
-`https://raw.githubusercontent.com/hugaalfatech/ros-uepa-v1/refs/heads/main/docs/ros-folder-structure.ail`
-
+Draft chi tiết cho HA local:  
+`https://raw.githubusercontent.com/hugaalfatech/ros-uepa-v1/refs/heads/main/docs/ha-folder-structure-v1.ail`

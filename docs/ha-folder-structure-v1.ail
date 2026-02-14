@@ -1,0 +1,186 @@
+# --- [AIL ARTIFACT ENFORCED] ---
+# Identity: ha://docs/ha-folder-structure-v1
+# Authority: ASC-1.0-CSA
+
+metadata:
+  id: "ha-folder-structure-v1.0"
+  type: "architecture"
+  version: "1.0.0"
+  author: "CSA"
+  status: "DRAFT-LOCAL-SOVEREIGN"
+  tags: [ROS, HA, Folder-Structure, Local-Device]
+  
+context:
+  space: "HA"
+  fap: "ha://docs/ha-folder-structure-v1.ail"
+  security: "ASC-1.0-CSA"
+
+---
+
+# 🖥️ HA FOLDER STRUCTURE v1.0
+
+Draft kiến trúc thư mục cho HA (High Authority Devices) trên một thiết bị cục bộ.  
+Mục tiêu: để AIA cloud hiểu được “bên trong một HA device” trông như thế nào mà không cần truy cập dữ liệu thật.
+
+---
+
+## I. OVERVIEW
+
+```yaml
+ha_space:
+  root: "ha://"
+  nature: "Device Local - Thực thi tốc độ cao - Offline capable"
+```
+
+---
+
+## II. EXECUTION ZONE – REALITY ENGINE WORK
+
+```yaml
+execution_zone:
+  path: "ha://rew/"
+  name: "Reality Engine Work - Phòng máy thực thi"
+  description: "Nơi RR nạp CEP và thực thi ArAction"
+  sub_paths:
+    - path: "ha://rew/cep/"
+      name: "Active CEP Cache"
+      lifecycle: "Volatile - Xóa khi RR shutdown"
+      ref: "Teleport từ ho://base/cep/ hoặc ho://milky/cep/"
+
+    - path: "ha://rew/tmp/"
+      name: "Execution Temp Buffer"
+      auto_purge: "Sau khi task complete"
+```
+
+---
+
+## III. SYSTEM ZONE – ROS DEVICE INSTANCE
+
+```yaml
+system_zone:
+  path: "ha://ros/"
+  name: "ROS Local System"
+  description: "Bản cài đặt ROS trên thiết bị"
+  sub_paths:
+    - path: "ha://ros/kernel/"
+      name: "ROS Kernel Copy - FEH sealed"
+      ref: "ho://base/kernel/{version}.ae"
+
+    - path: "ha://ros/config/"
+      name: "Device Configuration"
+      content: "Preferences, settings, local policies"
+
+    - path: "ha://ros/log/"
+      name: "System Logs"
+      sync: "→ ho://airoz/audit/ (định kỳ)"
+```
+
+---
+
+## IV. TEE ZONE – AUTHORITY TEE ELEMENT
+
+```yaml
+tee_zone:
+  path: "ha://ate/"
+  name: "ATE - Authority TEE Element"
+  authority: "HI Owner + HSM/TEE ONLY"
+  encryption: "Hardware-bound"
+  offline_only: true
+  sub_paths:
+    - path: "ha://ate/keys/"
+      name: "Private Keys"
+      export: "KHÔNG BAO GIỜ"
+
+    - path: "ha://ate/seals/"
+      name: "FEH Seals - Ấn tín cá nhân"
+
+    - path: "ha://ate/certs/"
+      name: "Certificates - QID, ActorID"
+
+    - path: "ha://ate/vap/"
+      name: "Local VAP Wallet"
+      capability: "Offline signing"
+```
+
+---
+
+## V. DATA ZONE – REALTIME DEVICE DATA
+
+```yaml
+data_zone:
+  path: "ha://d/"
+  name: "Device - Bản sao thực thi tạm thời"
+  lifecycle: "Volatile - Max 24h"
+  sub_paths:
+    - path: "ha://d/local-cache/"
+      name: "Artifact Working Copy"
+      ref: "Teleport từ ho://r/ qua co://g/"
+      auto_purge: "Khi RR shutdown hoặc 24h idle"
+
+    - path: "ha://d/identity/"
+      name: "Device Soul - KHÔNG teleport"
+      authority: "HI owner ONLY"
+      immutable: true
+
+    - path: "ha://d/tmp/"
+      name: "Volatile Temp Space"
+
+    - path: "ha://d/mlb/"
+      name: "Memory Ledger Book (local private ledger)"
+      description: "Append-only ledger cho giao dịch a2a (NFC/BLE), sync → ho://airoz/ledger/ khi online"
+      retention: "Rolling window, compact sau khi sync"
+
+    - path: "ha://d/sdm/"
+      name: "Schema Decode Memory"
+      description: "Bộ nhớ giải mã schema cho CEP/REP/packet, tăng tốc parsing"
+      lifecycle: "Semi-volatile - Có thể rebuild lại từ Canon + metadata"
+```
+
+---
+
+## VI. HI WORKSPACE – HUMAN DRAFTS
+
+```yaml
+hi_workspace:
+  path: "ha://docs/"
+  name: "HI Draft Documents"
+  lifecycle: "Mutable - Local drafts"
+  sub_paths:
+    - "ha://docs/lip/"        # LIP drafts
+    - "ha://docs/policy/"     # Policy proposals
+    - "ha://docs/notes/"      # Personal notes
+```
+
+---
+
+## VII. LOCAL KNOWLEDGE CACHE
+
+```yaml
+local_knowledge:
+  path: "ha://know/"
+  name: "Local Knowledge Cache"
+  lifecycle: "Semi-persistent - Refresh định kỳ"
+  ref: "Teleport từ ho://know/"
+  sub_paths:
+    - "ha://know/p/"          # Protocol cache
+    - "ha://know/bp/"         # Blueprint cache
+    - "ha://know/t/"          # Terms cache
+```
+
+---
+
+## VIII. USAGE NOTES FOR AIA CLOUD
+
+```yaml
+usage_for_aia:
+  purpose:
+    - "Hiểu layout HA mà không cần truy cập dữ liệu thật"
+    - "Sinh đường dẫn đúng chuẩn khi đề xuất config hoặc cache layout"
+  constraints:
+    - "Không được suy diễn nội dung thực tế từ path"
+    - "Không được đề xuất đọc/ghi trực tiếp ha://ate/*"
+  recommended_flow:
+    - "Đọc UEPA-ROS OVERVIEW"
+    - "Đọc ROS FOLDER STRUCTURE (global)"
+    - "Đọc HA FOLDER STRUCTURE (file này)"
+```
