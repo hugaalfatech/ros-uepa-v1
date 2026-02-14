@@ -1,0 +1,738 @@
+# HACE CLI - LOGIC & DESIGN PATTERNS v1.0.0
+
+```yaml
+# =====================================================================
+# HACE CLI LOGIC - INSPIRED BY LARAVEL ARTISAN
+# Design Patterns, Command Routing, and Namespace Hooks
+# =====================================================================
+
+metadata:
+  id: "doc-hace-cli-logic-v1"
+  version: "1.0.0"
+  type: "training-documentation"
+  language: "english"
+  format: "ail-hybrid"
+  audience: "AIA-developers"
+  fap: "ho://know/kip/hace-cli/logic.ail@v1.0.0"
+  
+  seal:
+    authority: "T5-CSA-APPROVED"
+    timestamp: "2026-02-14T16:45:00Z"
+    parent_doc: "ho://know/kip/hace-cli/overview.ail@v1.0.0"
+
+# =====================================================================
+# PART I: ARTISAN INSPIRATION
+# =====================================================================
+
+artisan_inspiration:
+  
+  what_we_learned_from_artisan:
+    
+    pattern_1_command_registration:
+      artisan_way: |
+        // Laravel Artisan
+        protected $signature = 'email:send {user} {--queue}';
+        protected $description = 'Send email to user';
+        
+        public function handle() {
+            $user = $this->argument('user');
+            $queue = $this->option('queue');
+            // ... send email
+        }
+      
+      hace_way: |
+        # Hace CLI
+        command:
+          signature: "nep:create {name} {--seal} {--vendor-level}"
+          description: "Create new Nano Engine Part"
+          namespace: "ha"  # implicit
+          
+          handler:
+            fap: "ha://e/clie/cmd/nep-create.ail"
+            hooks:
+              - HP_CLIE_CORE_PARSE_POST
+              - HP_CLIE_ACT_AR_PRE
+            
+            execute:
+              steps:
+                - validate_name_format(name)
+                - check_authority(actor, vendor_level)
+                - scaffold_nep_structure(name)
+                - if seal: apply_seal(nep, seal_type)
+                - register_to_ho_milky()
+                - return success_message
+      
+      key_differences:
+        - "Artisan: PHP class-based, Laravel-specific"
+        - "Hace: FAP-based, constitutional, cross-space"
+        - "Artisan: Synchronous only"
+        - "Hace: Async + teleport-aware"
+        - "Artisan: No built-in authority checks"
+        - "Hace: k.mother integration mandatory for T3+"
+    
+    pattern_2_command_grouping:
+      artisan_way: |
+        php artisan make:controller    # Create controller
+        php artisan make:model         # Create model
+        php artisan make:migration     # Create migration
+        # All under "make:" namespace
+      
+      hace_way: |
+        hace nep:create      # Create NEP
+        hace nep:link        # Link NEP to hook
+        hace nep:unlink      # Unlink NEP
+        hace nep:list        # List NEPs
+        hace nep:delete      # Delete NEP
+        # All under "nep:" action-space
+        
+        # Multi-level grouping
+        hace ho:r:list       # ho: (space) → r: (sub-namespace) → list (action)
+        hace go:p:enforce    # go: (space) → p: (sub) → enforce (action)
+      
+      key_differences:
+        - "Artisan: 2-level (namespace:command)"
+        - "Hace: 3+ level fractal (space:sub:sub:action)"
+        - "Artisan: Flat namespace, potential collisions"
+        - "Hace: Fractal namespace, infinite depth, collision-free"
+    
+    pattern_3_interactive_prompts:
+      artisan_way: |
+        $name = $this->ask('What is your name?');
+        $confirm = $this->confirm('Do you wish to continue?');
+        $choice = $this->choice('Pick color', ['red', 'blue']);
+      
+      hace_way: |
+        # Text mode
+        CLI prompts: "Enter resource name: "
+        User types: "my-resource"
+        
+        # Voice mode (Gemini TTS + STT)
+        CLI speaks: "What should we name this resource?"
+        User says: "my resource"
+        Gemini STT: "my-resource" (normalized)
+        
+        # Confirmation (multi-modal)
+        CLI prompts: "Delete 5 NEPs. Confirm? [y/N]"
+        User options:
+          - Type "y"
+          - Say "yes"
+          - Show fingerprint (biometric confirm)
+      
+      key_differences:
+        - "Artisan: Text-only prompts"
+        - "Hace: Multi-modal (text, voice, biometric)"
+        - "Artisan: Blocking input"
+        - "Hace: Async with timeout + smart defaults"
+    
+    pattern_4_progress_indicators:
+      artisan_way: |
+        $bar = $this->output->createProgressBar(count($users));
+        foreach ($users as $user) {
+            // process user
+            $bar->advance();
+        }
+        $bar->finish();
+      
+      hace_way: |
+        # For long-running operations
+        hace teleport:fn --from ho://r/cep/massive.ae --to ha://d/
+        
+        CLI output:
+        [========>                    ] 35% (teleporting packet)
+        [==============>              ] 60% (verifying FEH)
+        [========================>    ] 95% (executing locally)
+        [============================] 100% Complete (2.3s)
+        
+        # Voice mode alternative
+        "Teleporting... halfway there... almost done... completed"
+      
+      key_differences:
+        - "Artisan: Visual progress bar only"
+        - "Hace: Visual + voice progress updates"
+        - "Artisan: Single-threaded"
+        - "Hace: Shows concurrent operations (e.g., multi-packet teleport)"
+
+  what_we_improved_over_artisan:
+    
+    improvement_1_constitutional_namespaces:
+      problem: "Artisan has no governance over command namespaces"
+      solution: |
+        Hace CLI has CONSTITUTIONAL NAMESPACES:
+        - Only 4 allowed prefixes: (none for HA), ho:, go:, co:
+        - Forbidden prefixes: ti:, pi:, eg:, ao:
+        - Vendors can add SUB-NAMESPACES but not root prefixes
+        - All enforced by HP_NAMESPACE_DETECT_FORBIDDEN hook
+      
+      benefit: "Prevents namespace pollution, ensures consistency across vendors"
+    
+    improvement_2_teleport_first_design:
+      problem: "Artisan is request-response (REST-like)"
+      solution: |
+        Hace CLI is TELEPORT-FIRST:
+        - Command doesn't "call remote API"
+        - Command "teleports capability locally, executes, returns proof"
+        - Works offline with cached CEPs
+        - No server dependency during execution
+      
+      benefit: "Faster, more secure, works offline, immutable proof trail"
+    
+    improvement_3_multimodal_input:
+      problem: "Artisan only accepts typed commands"
+      solution: |
+        Hace CLI accepts:
+        - Typed commands (traditional)
+        - Voice commands (Gemini STT)
+        - Gesture commands (AR Core)
+        - Sensor triggers (IoT bridge)
+      
+      benefit: "Hands-free operation, accessibility, automation"
+    
+    improvement_4_built_in_governance:
+      problem: "Artisan has no authority or permission system"
+      solution: |
+        Hace CLI has BUILT-IN GOVERNANCE:
+        - Every command checked against actor T-level
+        - T3+ commands go through k.mother 14-step validation
+        - ASC weight verification for policy changes
+        - Trust Score impact for every significant action
+      
+      benefit: "Enterprise-ready, audit-compliant, prevents abuse"
+    
+    improvement_5_evidence_generation:
+      problem: "Artisan commands leave no immutable trace"
+      solution: |
+        Hace CLI generates EVIDENCE:
+        - Every mutation creates REP (Reality Evidence Particle)
+        - REP stored in ho://airoz/ for 90 days
+        - Significant REPs become VAPs (Value & Authority Particles)
+        - VAPs fossil into Orion for eternal archive
+      
+      benefit: "Full audit trail, time-travel debugging, compliance"
+
+# =====================================================================
+# PART II: COMMAND ROUTING LOGIC
+# =====================================================================
+
+command_routing:
+  
+  routing_stages:
+    
+    stage_1_lexical_analysis:
+      description: "Break command string into tokens"
+      
+      example: |
+        Input: "hace ho:r:list --owner AID-0xVendor --sec protected"
+        
+        Tokens:
+          - command_verb: "hace"
+          - namespace: "ho"
+          - sub_namespace: "r"
+          - action: "list"
+          - flags:
+              - name: "owner"
+                value: "AID-0xVendor"
+              - name: "sec"
+                value: "protected"
+      
+      implementation: |
+        function tokenize(raw_command: String) -> Tokens {
+            # Split by whitespace, respect quotes
+            parts = split_respecting_quotes(raw_command)
+            
+            # First token is always "hace"
+            assert parts[0] == "hace"
+            
+            # Second token is namespace:action or action (if HA implicit)
+            if parts[1].contains(":"):
+                namespace_parts = parts[1].split(":")
+                namespace = namespace_parts[0]
+                sub_namespace = namespace_parts[1] if len > 2 else null
+                action = namespace_parts[-1]
+            else:
+                namespace = "ha"  # implicit
+                action = parts[1]
+            
+            # Remaining tokens are flags/arguments
+            flags = parse_flags(parts[2..])
+            
+            return Tokens { namespace, sub_namespace, action, flags }
+        }
+    
+    stage_2_namespace_detection:
+      description: "Determine target space via hook detectors"
+      
+      hook_chain: |
+        HP_NAMESPACE_DETECT_FORBIDDEN (priority 1)
+          ↓ if not forbidden
+        HP_NAMESPACE_DETECT_HA (priority 1, implicit check)
+          ↓ if no prefix
+        HP_NAMESPACE_DETECT_HO (priority 2, if prefix "ho:")
+          ↓ if not ho:
+        HP_NAMESPACE_DETECT_GO (priority 2, if prefix "go:")
+          ↓ if not go:
+        HP_NAMESPACE_DETECT_CO (priority 2, if prefix "co:")
+          ↓ if not co:
+        REJECT (unrecognized namespace)
+      
+      detector_logic_example: |
+        # HP_NAMESPACE_DETECT_HO
+        function detect_ho(tokens: Tokens) -> NamespaceResult {
+            if tokens.namespace != "ho":
+                return NamespaceResult { matched: false }
+            
+            # Validate sub-namespace
+            allowed_subs = ["r", "know", "airoz", "orion", "uni"]
+            if tokens.sub_namespace not in allowed_subs:
+                return NamespaceResult {
+                    matched: false,
+                    error: "Invalid HO sub-namespace"
+                }
+            
+            return NamespaceResult {
+                matched: true,
+                namespace: "HO",
+                sub: tokens.sub_namespace,
+                teleport_required: true,
+                executor: "ti://e/a/sipe-teleport.ail"
+            }
+        }
+    
+    stage_3_action_resolution:
+      description: "Map action to handler FAP"
+      
+      resolution_table: |
+        # HA actions (local)
+        HA:
+          orch:
+            status:    ha://e/orch/status.ail
+            start:     ha://e/orch/start.ail
+            stop:      ha://e/orch/stop.ail
+          
+          fem:
+            list:      ha://e/clie/cmd/fem-list.ail
+            start:     ha://e/clie/cmd/fem-start.ail
+            stop:      ha://e/clie/cmd/fem-stop.ail
+          
+          nep:
+            create:    ha://e/clie/cmd/nep-create.ail
+            link:      ha://e/clie/cmd/nep-link.ail
+            list:      ha://e/clie/cmd/nep-list.ail
+        
+        # HO actions (remote teleport)
+        HO:
+          r:
+            list:      ho://e/ars/list.ail
+            get:       ho://e/ars/get.ail
+            transfer:  ho://e/ars/transfer.ail
+          
+          know:
+            search:    ho://e/know/search.ail
+            get:       ho://e/know/get.ail
+      
+      fallback_handling: |
+        If action not in table:
+          1. Check for NEP-registered custom actions (HP_CLI_EXT_NAMESPACE)
+          2. If still not found: try AI inference (Gemini Intent Parser)
+          3. If AI can't resolve: return "Command not found" error
+    
+    stage_4_authority_routing:
+      description: "Route through appropriate authority layer"
+      
+      routing_decision_tree: |
+        if action.required_tier <= T1:
+            # Low-authority, direct execute
+            route_to: EXECUTOR_DIRECT
+        
+        elif action.required_tier == T2:
+            # Medium authority, check actor tier
+            if actor.tier >= T2:
+                if action.is_mutative:
+                    # Mutation requires confirmation
+                    route_to: EXECUTOR_WITH_CONFIRM
+                else:
+                    route_to: EXECUTOR_DIRECT
+            else:
+                return AuthError("Requires T2+")
+        
+        elif action.required_tier >= T3:
+            # High authority, k.mother mandatory
+            if actor.tier >= action.required_tier:
+                route_to: K_MOTHER_ARBITER
+            else:
+                return AuthError(f"Requires T{action.required_tier}+")
+      
+      k_mother_flow: |
+        1. Create ArAction struct
+        2. Submit to k.mother via HP_CLIE_ACT_AR_PRE
+        3. k.mother runs 14-step validation:
+           - Submit, Flow Validation, Constitutional Filter
+           - Authority Gate, DIM Policy, Chronos Lease
+           - Resource Feasibility, Priority, ExecutionContext
+           - Pre-snapshot, State Access, Execute
+           - Reconcile, Ticket Consume, Resource Release, ERPE
+        4. If approved: get FEH seal, proceed to execution
+        5. If rejected: return verdict, command fails
+
+# =====================================================================
+# PART III: HOOK NAMESPACE SYSTEM
+# =====================================================================
+
+hook_namespace_system:
+  
+  what_are_hook_namespaces:
+    definition: |
+      A HOOK NAMESPACE is a hierarchical extension point in Hace CLI
+      where Vendors can register custom behavior via NEPs.
+      
+      Unlike traditional plugins, hook namespaces are:
+      - Constitutional (defined in go://p/m/cli-hook-standard.ail)
+      - Immutable (cannot be deleted or modified)
+      - Governed (require k.mother approval for new hooks)
+      - Sandboxed (NEPs run in isolated WASM environment)
+    
+    analogy: |
+      If Hace CLI were a building:
+      - FEM (Fractal Engine Modules) are the steel beams (structure)
+      - Hook Points are the electrical outlets (connection points)
+      - NEPs are the appliances you plug in (extensions)
+      
+      You can't move the outlets (hooks are fixed).
+      You can't replace the beams (FEM is royal-only).
+      But you can plug in infinite appliances (NEPs are vendor-extensible).
+  
+  core_hook_namespaces:
+    
+    HP_CLIE_CORE_*:
+      description: "Core parsing, session, execution hooks"
+      fap: "ha://e/clie/core/spine.ail"
+      hooks:
+        - HP_CLIE_CORE_PARSE_PRE: "Before parsing command"
+        - HP_CLIE_CORE_PARSE_POST: "After parsing success"
+        - HP_CLIE_CORE_FAP_RESOLVE: "When resolving FAP reference"
+        - HP_CLIE_CORE_AUTH: "Authentication check"
+        - HP_CLIE_CORE_ASC_CHECK: "ASC weight verification"
+        - HP_CLIE_CORE_DISPATCH: "Before command dispatch"
+      
+      allowed_nep_types: ["plg-", "sec-", "aud-"]
+      
+      vendor_use_cases:
+        - "Custom syntax validation (plg-syntax-validator.ail)"
+        - "Additional auth factors (sec-yubikey.ail)"
+        - "Compliance logging (aud-sox-logger.ail)"
+    
+    HP_CLIE_SENSE_*:
+      description: "Sensory input hooks (voice, vision, gesture, IoT)"
+      fap: "ha://e/clie/sense/mother.ail"
+      hooks:
+        - HP_CLIE_SENSE_VOICE_PRE: "Before voice processing"
+        - HP_CLIE_SENSE_VOICE_POST: "After voice-to-text"
+        - HP_CLIE_SENSE_VOICE_INTENT: "Intent resolution from voice"
+        - HP_CLIE_SENSE_TALK_PRE: "Before text-to-speech"
+        - HP_CLIE_SENSE_TALK_POST: "After speech generation"
+        - HP_CLIE_SENSE_VISION_PRE: "Before vision processing"
+        - HP_CLIE_SENSE_VISION_POST: "After vision analysis"
+        - HP_CLIE_SENSE_IOT_INGEST: "IoT sensor data ingest"
+        - HP_CLIE_SENSE_IOT_RULE: "IoT rule evaluation"
+        - HP_CLIE_SENSE_GESTURE: "AR gesture recognition"
+      
+      allowed_nep_types: ["adt-", "alg-", "plg-", "sec-", "wid-"]
+      
+      vendor_use_cases:
+        - "Vietnamese accent enhancement (alg-vietnamese-tone.ail)"
+        - "Custom wake word (adt-wake-word.ail)"
+        - "Factory floor gesture library (alg-gesture-factory.ail)"
+    
+    HP_CLIE_COG_*:
+      description: "Cognitive hooks (intent, context, reasoning, memory)"
+      fap: "ha://e/clie/cog/brain.ail"
+      hooks:
+        - HP_CLIE_COG_INTENT: "Intent parsing"
+        - HP_CLIE_COG_CONTEXT_GET: "Context retrieval"
+        - HP_CLIE_COG_CONTEXT_SET: "Context update"
+        - HP_CLIE_COG_RISK: "Risk assessment"
+        - HP_CLIE_COG_SUGGEST: "Command suggestion"
+        - HP_CLIE_COG_MEMORY_GET: "History retrieval"
+        - HP_CLIE_COG_MEMORY_SET: "History storage"
+      
+      allowed_nep_types: ["alg-", "plg-", "adt-", "sec-", "viz-", "aud-"]
+      
+      vendor_use_cases:
+        - "Domain-specific intent model (alg-medical-intent.ail)"
+        - "Risk scoring for finance (alg-fintech-risk.ail)"
+        - "Command recommendation engine (alg-recommend.ail)"
+    
+    HP_CLIE_ACT_*:
+      description: "Action execution hooks (ArAction, teleport, ARE)"
+      fap: "ha://e/clie/act/bridge.ail"
+      hooks:
+        - HP_CLIE_ACT_AR_PRE: "Before ArAction submission"
+        - HP_CLIE_ACT_AR_POST: "After ArAction complete"
+        - HP_CLIE_ACT_TELEPORT_PRE: "Before teleport"
+        - HP_CLIE_ACT_TELEPORT_POST: "After teleport"
+        - HP_CLIE_ACT_ARE: "Direct ARE execution"
+        - HP_CLIE_ACT_KMOTHER: "k.mother query"
+      
+      allowed_nep_types: ["plg-", "sec-", "aud-"]
+      
+      vendor_use_cases:
+        - "Pre-execution validation (plg-validate-params.ail)"
+        - "Post-execution notification (plg-slack-notifier.ail)"
+        - "Forensic audit (aud-forensic-logger.ail)"
+    
+    HP_NAMESPACE_*:
+      description: "Namespace detection and validation hooks"
+      fap: "ha://e/clie/registry/namespace-map.ail"
+      hooks:
+        - HP_NAMESPACE_DETECT_HA: "HA (implicit) detection"
+        - HP_NAMESPACE_DETECT_HO: "HO (explicit) detection"
+        - HP_NAMESPACE_DETECT_GO: "GO (explicit) detection"
+        - HP_NAMESPACE_DETECT_CO: "CO (explicit) detection"
+        - HP_NAMESPACE_DETECT_FORBIDDEN: "Forbidden prefix rejection"
+        - HP_NAMESPACE_VALIDATE_HA: "HA authority validation"
+        - HP_NAMESPACE_VALIDATE_HO: "HO authority validation"
+        - HP_NAMESPACE_VALIDATE_GO: "GO authority validation"
+        - HP_NAMESPACE_VALIDATE_CO: "CO authority validation"
+        - HP_NAMESPACE_RESOLVE_HO: "HO FAP resolution"
+        - HP_NAMESPACE_RESOLVE_GO: "GO FAP resolution"
+        - HP_NAMESPACE_RESOLVE_CO: "CO FAP resolution"
+        - HP_NAMESPACE_AUDIT_TELEPORT: "Teleport audit logging"
+        - HP_NAMESPACE_AUDIT_FORBIDDEN: "Forbidden attempt logging"
+        - HP_NAMESPACE_AUDIT_LOCAL: "Local mutation logging"
+      
+      allowed_nep_types: ["plg-", "aud-"]
+      
+      vendor_use_cases:
+        - "Custom namespace validation (plg-company-namespace.ail)"
+        - "Audit enrichment (aud-enrich-context.ail)"
+  
+  nep_registration_flow:
+    
+    step_1_development:
+      location: "ho://uni/draft/nep/clie/"
+      state: "incubation"
+      feh: "temporary (7 days auto-purge)"
+      
+      example: |
+        # Vendor develops NEP locally
+        nep_structure:
+          metadata:
+            name: "vietnamese-accent-enhancer"
+            type: "alg"
+            version: "1.0.0"
+            author: "VinAI"
+            vendor_level: 2
+          
+          hooks:
+            - hook_id: "HP_CLIE_SENSE_VOICE_PRE"
+              function: "enhance_vietnamese_tones"
+              priority: 50
+          
+          code:
+            fap: "ho://uni/draft/nep/clie/vinai/alg-vietnamese-accent.ail"
+            test_coverage: 0.92
+            security_scan: "PASSED"
+    
+    step_2_submission:
+      action: "Vendor pushes NEP to ho://milky/nep/clie/"
+      command: "hace nep:create vietnamese-accent-enhancer --submit"
+      
+      validation_checks:
+        - "Metadata complete (name, version, author, hooks)"
+        - "Test coverage >= 80%"
+        - "Security scan passed"
+        - "No malicious code patterns"
+        - "Hook interface compliance"
+        - "Vendor Trust Score >= threshold (650 for L4, 750 for L3, etc.)"
+    
+    step_3_review:
+      reviewers: "AIA Architect + HA Security Team"
+      duration: "< 24h for Level 1-2, < 7 days for Level 3-4"
+      
+      review_criteria:
+        - "Code quality (readability, maintainability)"
+        - "Performance impact (latency, memory)"
+        - "Security (no vulnerabilities, no backdoors)"
+        - "Compliance (license, legal)"
+      
+      possible_outcomes:
+        - "APPROVED → proceed to publication"
+        - "REJECTED → permanent, return to vendor with reason"
+        - "NEED_FIX → temporary, vendor has 14 days to fix"
+    
+    step_4_publication:
+      location: "ho://milky/nep/clie/<category>/<vendor>/<type>-<name>.ail"
+      feh: "permanent (k.mother seal)"
+      state: "active"
+      
+      example_fap: "ho://milky/nep/clie/sense/vinai/alg-vietnamese-accent.ail@v1.0.0"
+      
+      auto_discovery: |
+        # Other users can discover via
+        hace nep:list --fem CLIE-SENSE --type alg
+        
+        # Output:
+        Found 15 NEPs:
+        - alg-vietnamese-accent (VinAI, v1.0.0, Trust 870)
+        - alg-gesture-factory (FPT, v2.1.0, Trust 820)
+        - ...
+    
+    step_5_linking:
+      action: "User links NEP to their local HA instance"
+      command: "hace nep:link --fap ho://milky/.../alg-vietnamese-accent.ail@v1.0.0 --hook HP_CLIE_SENSE_VOICE_PRE"
+      
+      linking_process: |
+        1. Download NEP to ha://d/nep-cache/
+        2. Verify FEH seal from k.mother
+        3. Load NEP into hook registry
+        4. Test NEP (dry-run with sample data)
+        5. If pass: activate, if fail: reject and alert vendor
+      
+      priority_management: |
+        # Multiple NEPs can hook into same hook point
+        # Priority determines execution order (1 = first)
+        
+        Example:
+        HP_CLIE_SENSE_VOICE_PRE:
+          - priority 30: sec-voice-biometric.ail (Level 1, VinAI)
+          - priority 50: alg-vietnamese-accent.ail (Level 2, VinAI)
+          - priority 70: plg-custom-wake-word.ail (Level 3, Freelancer)
+        
+        Execution order: 30 → 50 → 70
+
+# =====================================================================
+# PART IV: COMMAND PATTERNS & BEST PRACTICES
+# =====================================================================
+
+command_patterns:
+  
+  pattern_1_single_responsibility:
+    principle: "Each command should do ONE thing well"
+    
+    good_example: |
+      hace nep:create my-validator
+      hace nep:link --fap <fap> --hook <hook>
+      hace nep:test --fap <fap>
+      hace nep:deploy --fap <fap>
+    
+    bad_example: |
+      hace nep:create-link-test-deploy my-validator
+      # Too many actions in one command, hard to debug
+    
+    rationale: "Single responsibility enables better error handling, clearer audit trail"
+  
+  pattern_2_progressive_confirmation:
+    principle: "Ask for confirmation based on risk, not blindly"
+    
+    implementation: |
+      T0-T1 READ commands: No confirmation
+      T2 WRITE commands: Smart confirmation (if --confirm flag, else auto)
+      T3 CONFIG commands: Mandatory confirmation (1x)
+      T4 DELETE/ENFORCE commands: Mandatory confirmation (2x) + biometric
+      T5 CONSTITUTIONAL commands: Mandatory confirmation (3x) + biometric + ASC weight
+    
+    example: |
+      # T2 command
+      hace nep:create my-nep
+      # No prompt, auto-creates
+      
+      # T3 command
+      hace fem:stop --id <fem-id>
+      Prompt: "Stop FEM 'UserManager'? This affects 127 active sessions. [y/N]"
+      
+      # T4 command
+      hace ho:r:transfer --fap <fap> --to <aid>
+      Prompt 1: "Transfer resource 'premium-cep' to AID-0xBuyer? [y/N]"
+      Prompt 2: "Confirm transfer? This is IRREVERSIBLE. [y/N]"
+      Biometric: "Place finger on sensor"
+  
+  pattern_3_verbose_by_exception:
+    principle: "Be quiet on success, verbose on failure or --verbose flag"
+    
+    normal_output: |
+      hace nep:create my-validator
+      # Output:
+      Created NEP 'my-validator' at ho://uni/draft/nep/clie/my-validator.ail
+    
+    verbose_output: |
+      hace nep:create my-validator --verbose
+      # Output:
+      [Step 1/5] Validating name format... OK (12ms)
+      [Step 2/5] Checking authority (T2 required)... OK (5ms)
+      [Step 3/5] Scaffolding NEP structure... OK (47ms)
+      [Step 4/5] Writing to ho://uni/draft/... OK (234ms)
+      [Step 5/5] Registering to local index... OK (8ms)
+      Created NEP 'my-validator' (total: 306ms)
+    
+    error_output: |
+      hace nep:create my-validator
+      # Output:
+      Error: Name 'my-validator' contains invalid character '-'
+      Hint: Use snake_case (e.g., 'my_validator') or camelCase
+      Reference: go://s/nep-naming-standard.ail@v1.0.0
+  
+  pattern_4_dry_run_first:
+    principle: "Offer dry-run for destructive operations"
+    
+    destructive_commands:
+      - "nep:delete"
+      - "fem:stop"
+      - "ho:r:transfer"
+      - "go:p:enforce"
+      - "teleport:fn (if --destructive-target)"
+    
+    dry_run_example: |
+      hace ho:r:transfer --fap <fap> --to <aid> --dry-run
+      
+      # Output:
+      Dry-run mode: No changes will be made
+      
+      Would transfer:
+        Resource: ho://r/ars-r/premium-cep-v2.ae
+        From: AID-0xSeller (Trust 890)
+        To: AID-0xBuyer (Trust 720)
+        
+      Required authority: T4+
+      Current actor: T5 (Gà Tổng)
+        
+      Estimated duration: 1.2s
+      Resource impact: None (atomic transfer)
+        
+      Would generate:
+        REP: ho://airoz/rep/transfer/2026-02-14-001.ail
+        VAP: airoz://r/vap/epoch-3/transfer-001.ail (minted after 90d)
+        
+      To execute for real, remove --dry-run flag
+
+# =====================================================================
+# END OF LOGIC DOCUMENTATION
+# =====================================================================
+
+references:
+  - title: "Laravel Artisan Documentation"
+    url: "https://laravel.com/docs/11.x/artisan"
+    note: "Original inspiration for command patterns"
+  
+  - title: "Hace CLI Overview"
+    fap: "ho://know/kip/hace-cli/overview.ail@v1.0.0"
+  
+  - title: "Namespace Map (Patch v1.3.1)"
+    fap: "ha://e/clie/registry/namespace-map.ail@v1.3.1"
+
+training_notes_for_aia: |
+  This logic document teaches:
+  1. How Hace CLI evolved from Laravel Artisan
+  2. Command routing stages (lexical → namespace → action → authority)
+  3. Hook namespace system (FEM vs NEP, registration flow)
+  4. Best practices (single responsibility, progressive confirmation, etc.)
+  
+  Key takeaways:
+  - Hace is "Artisan for Reality", not just for apps
+  - Namespaces are fractal and constitutional, not flat
+  - Every command goes through governance layers
+  - Vendors extend via NEPs (hooks), not FEM (core)
+  - Evidence generation is mandatory, not optional
+  
+  Proceed to:
+  - hace-cli-clie-engine.ail (CLIE macro engine internals)
+  - hace-cli-hookpoints.ail (Complete hook catalog)
+```

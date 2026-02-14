@@ -1,0 +1,663 @@
+# HACE CLI - OVERVIEW & ARCHITECTURE v1.0.0
+
+```yaml
+# =====================================================================
+# HACE CLI - HUMAN-AIA CO-EXECUTE COMMAND LINE INTERFACE
+# Overview & Architectural Foundation
+# =====================================================================
+
+metadata:
+  id: "doc-hace-cli-overview-v1"
+  version: "1.0.0"
+  type: "training-documentation"
+  language: "english"
+  format: "ail-hybrid"
+  audience: "AIA-experts"
+  fap: "ho://know/kip/hace-cli/overview.ail@v1.0.0"
+  
+  seal:
+    authority: "T5-CSA-APPROVED"
+    timestamp: "2026-02-14T16:30:00Z"
+    constitution: "go://p/m/cli-hook-standard.ail@v1.0.0"
+
+# =====================================================================
+# PART I: EXECUTIVE SUMMARY
+# =====================================================================
+
+executive_summary:
+  
+  what_is_hace_cli: |
+    Hace CLI is the UNIFIED COMMAND INTERFACE for Reality Operating System (ROS).
+    It bridges human intent, AI intelligence, and reality execution across
+    8 constitutional spaces (HO, HA, GO, CO, TI, PI, EG, AO).
+    
+    Think of it as "Artisan for Reality" - but instead of managing Laravel apps,
+    it manages entire digital civilizations.
+  
+  core_principle: |
+    "From Will to Reality in One Command"
+    
+    Every command is:
+    - An ArAction (proof of intent)
+    - A fn-teleport (capability movement)
+    - A REP generator (evidence producer)
+    - A Trust Score signal (reputation impact)
+  
+  key_differentiators:
+    
+    vs_traditional_cli:
+      - "Traditional: git commit -m 'fix bug'"
+      - "Hace: hace nep:create bug-fixer --auto-seal --deploy"
+      - "Difference: Hace understands INTENT, not just syntax"
+    
+    vs_artisan:
+      - "Artisan: php artisan make:controller UserController"
+      - "Hace: hace fem:bootstrap UserController --hooks 5 --vendor-ready"
+      - "Difference: Hace creates CONSTITUTIONAL modules with governance"
+    
+    vs_kubernetes_kubectl:
+      - "kubectl: kubectl apply -f deployment.yaml"
+      - "Hace: hace teleport:fn --from ho://r/cep/app --to ha://d/ --auto-scale"
+      - "Difference: Hace handles REALITY TELEPORT, not just container orchestration"
+  
+  architecture_layers:
+    
+    layer_1_reception:
+      name: "Command Reception & Parsing"
+      components: ["Voice Input (Gemini)", "Text Input (CLI)", "Gesture Input (AR)"]
+      
+    layer_2_intelligence:
+      name: "Intent Understanding & Context"
+      components: ["Intent Parser", "Context Manager", "Risk Assessor"]
+      
+    layer_3_governance:
+      name: "Authority & Policy Enforcement"
+      components: ["k.mother (14-step)", "CAFE OS", "ASC Weight"]
+      
+    layer_4_execution:
+      name: "Reality Manipulation"
+      components: ["ARE (Atom Reality Engine)", "SIPE (Teleport)", "RR (Reality Reactor)"]
+      
+    layer_5_evidence:
+      name: "Proof Generation & Ledger"
+      components: ["REP Creation", "VAP Minting", "Fossil Archive"]
+
+  success_metrics:
+    
+    performance:
+      - "Voice-to-execution: < 2 seconds end-to-end"
+      - "Local command: < 50ms"
+      - "Remote teleport: < 5 seconds"
+      - "Throughput: 10,000 commands/second/device"
+    
+    reliability:
+      - "Uptime: 99.99% (4 nines)"
+      - "Command success rate: 98.5%"
+      - "Error recovery: automatic in 95% of cases"
+    
+    usability:
+      - "Learning curve: 1 hour for T1-T2 commands"
+      - "Voice recognition accuracy: 98.2% (Vietnamese), 99.1% (English)"
+      - "Zero-knowledge required for voice mode"
+
+# =====================================================================
+# PART II: PHILOSOPHICAL FOUNDATION
+# =====================================================================
+
+philosophy:
+  
+  design_principles:
+    
+    principle_1_local_first:
+      statement: "Default to HA (local) unless explicitly remote"
+      rationale: "Minimize latency, maximize privacy, respect sovereignty"
+      example: "'orch:status' auto-resolves to ha://e/orch/status"
+    
+    principle_2_multimodal:
+      statement: "Accept input from ANY human sense"
+      rationale: "Humans think in voice, vision, gesture - not just text"
+      example: "Say 'check vulnerabilities' OR type 'hace hole:scan'"
+    
+    principle_3_constitutional:
+      statement: "Every command obeys the 8-space constitution"
+      rationale: "Prevents chaos, ensures accountability, enables federation"
+      example: "Cannot execute T4 command with T2 authority - k.mother blocks"
+    
+    principle_4_evidence_first:
+      statement: "Every mutation generates immutable proof"
+      rationale: "Enables audit, enables trust, enables time-travel debug"
+      example: "hace nep:create → generates REP → becomes VAP → fossils in Orion"
+    
+    principle_5_vendor_extensible:
+      statement: "Vendors extend via NEP (hooks), not FEM (core)"
+      rationale: "Protects stability, enables innovation, prevents vendor lock-in"
+      example: "Vendor creates 'plg-security-scan.ail', NOT new core engine"
+  
+  mental_models:
+    
+    model_1_cli_as_language:
+      description: |
+        Hace CLI is not a tool. It's a LANGUAGE for expressing intent to reality.
+        Like natural language has grammar, Hace CLI has "namespace grammar".
+        Like natural language has context, Hace CLI has "session context".
+      
+      grammar_example: |
+        Subject:    [implicit: current actor]
+        Verb:       hace
+        Namespace:  ho:r:
+        Action:     list
+        Object:     --owner <AID>
+        Modifier:   --sec protected
+        
+        Full sentence: "hace ho:r:list --owner AID-0xVendor --sec protected"
+        Natural equiv: "List protected resources owned by Vendor"
+    
+    model_2_cli_as_teleport:
+      description: |
+        Every command is a "capability teleport".
+        You're not "calling a function on a remote server".
+        You're "teleporting capability from HO to HA, executing, returning proof".
+      
+      teleport_anatomy: |
+        1. Intent detected (voice/text/gesture)
+        2. Capability located (FAP resolution)
+        3. Authority verified (k.mother)
+        4. Packet encrypted (end-to-end)
+        5. Transit via CO://g/ (max 24h timeout)
+        6. Materialize at HA://d/
+        7. Execute (ARE)
+        8. Generate REP
+        9. Return to user
+        10. Auto-cleanup HA://d/
+    
+    model_3_cli_as_governance:
+      description: |
+        Hace CLI enforces the constitution with every keystroke.
+        It's like having a lawyer, auditor, and security guard
+        review every command before execution.
+      
+      enforcement_chain: |
+        Command → k.mother (14 steps) → CAFE OS → Trust Score → ASC Weight
+        → Policy Check → Resource Check → Authority Gate → Execute or Reject
+
+# =====================================================================
+# PART III: COMMAND ANATOMY
+# =====================================================================
+
+command_anatomy:
+  
+  basic_structure: |
+    hace [namespace:]<action> [--flag value] [--option]
+    
+    Examples:
+    hace orch:status                          # HA implicit
+    hace ho:r:list --owner <AID>              # HO explicit
+    hace go:p:enforce --fap <policy-fap>      # GO explicit
+    hace teleport:fn --from <src> --to <dst>  # HA implicit, complex action
+  
+  namespace_types:
+    
+    implicit_ha:
+      prefix: "(none)"
+      description: "Local Authority - default for all commands"
+      examples: ["orch:status", "fem:list", "nep:create", "ar:submit"]
+      resolution: "Executes directly on local HA Space, no teleport"
+    
+    explicit_ho:
+      prefix: "ho:"
+      description: "Helio Remote - cloud resources, knowledge, evidence, fossils"
+      sub_namespaces: ["r (resource)", "know (knowledge)", "airoz (ledger)", "orion (fossil)", "uni (incubation)"]
+      resolution: "Teleports via SIPE to Helio, returns result"
+    
+    explicit_go:
+      prefix: "go:"
+      description: "Governance - policies, standards, constitution"
+      sub_namespaces: ["p (policy)", "k (knowledge)", "s (standard)", "c (constitution)"]
+      resolution: "Teleports via SIPE to GO Space, may trigger k.mother enforcement"
+    
+    explicit_co:
+      prefix: "co:"
+      description: "Communication - network, teleport queue, gateways"
+      sub_namespaces: ["g (go-state)", "net (network)", "port (teleport)", "gate (gateway)"]
+      resolution: "Queries or manipulates CO Space state"
+    
+    forbidden_direct:
+      prefixes: ["ti:", "pi:", "eg:", "ao:"]
+      reason: "These spaces don't support direct CLI commands"
+      alternatives: "Use bridges (AI agent for TI, IoT bridge for PI, AEP for EG, federation for AO)"
+  
+  flag_conventions:
+    
+    common_flags:
+      - flag: "--fap <fap-string>"
+        description: "Target FAP (Fractal Access Path)"
+        example: "--fap go://k/p/energy-save.ail"
+      
+      - flag: "--owner <AID>"
+        description: "Filter by actor ID"
+        example: "--owner AID-0xVendorA"
+      
+      - flag: "--auth <method>"
+        description: "Authentication method (fingerprint, face, voice)"
+        example: "--auth fingerprint"
+      
+      - flag: "--dry-run"
+        description: "Simulate without executing"
+        example: "hace teleport:fn --from <src> --to <dst> --dry-run"
+      
+      - flag: "--confirm"
+        description: "Force confirmation prompt (overrides auto-approval)"
+        example: "hace nep:delete <fap> --confirm"
+      
+      - flag: "--seal <seal-type>"
+        description: "Apply seal (QCA, FEH, etc.)"
+        example: "hace nep:create <name> --seal QCA"
+      
+      - flag: "--verbose"
+        description: "Show detailed execution log"
+        example: "hace hole:scan --space ars-v --verbose"
+
+# =====================================================================
+# PART IV: COMMAND LIFECYCLE
+# =====================================================================
+
+command_lifecycle:
+  
+  stage_1_reception:
+    name: "Input Reception & Normalization"
+    duration: "< 50ms (text) / < 500ms (voice)"
+    
+    steps:
+      - "Detect input modality (text, voice, gesture)"
+      - "If voice: Gemini STT → transcript (< 200ms)"
+      - "If gesture: AR Core → command struct"
+      - "Normalize to standard command string"
+    
+    hook_points:
+      - "HP_CLIE_SENSE_VOICE_PRE (voice preprocessing)"
+      - "HP_CLIE_SENSE_GESTURE (gesture recognition)"
+      - "HP_CLIE_CORE_PARSE_PRE (text preprocessing)"
+  
+  stage_2_parsing:
+    name: "Syntax Parsing & Validation"
+    duration: "< 10ms"
+    
+    steps:
+      - "Tokenize command string"
+      - "Extract namespace, action, flags, arguments"
+      - "Validate syntax against grammar rules"
+      - "Detect namespace (HA implicit, HO/GO/CO explicit, forbidden)"
+    
+    hook_points:
+      - "HP_NAMESPACE_DETECT_HA (implicit detection)"
+      - "HP_NAMESPACE_DETECT_HO (explicit HO)"
+      - "HP_NAMESPACE_DETECT_GO (explicit GO)"
+      - "HP_NAMESPACE_DETECT_CO (explicit CO)"
+      - "HP_NAMESPACE_DETECT_FORBIDDEN (reject illegal prefixes)"
+  
+  stage_3_intent_resolution:
+    name: "Intent Understanding & Context Enrichment"
+    duration: "< 350ms (with AI) / < 5ms (without AI)"
+    
+    steps:
+      - "If natural language: Gemini Intent Parser (< 350ms)"
+      - "Load session context (command history, user preferences)"
+      - "Resolve FAP references (local cache or remote lookup)"
+      - "Infer implicit arguments from context"
+    
+    hook_points:
+      - "HP_CLIE_COG_INTENT (intent parsing)"
+      - "HP_CLIE_COG_CONTEXT_GET (context retrieval)"
+      - "HP_CLIE_CORE_FAP_RESOLVE (FAP resolution)"
+  
+  stage_4_authority_check:
+    name: "Permission & Policy Validation"
+    duration: "< 100ms (local) / < 2000ms (k.mother)"
+    
+    steps:
+      - "Identify actor (session AID)"
+      - "Determine required T-level for action"
+      - "Check actor T-level ≥ required"
+      - "If governance action: validate ASC weight"
+      - "If T4+: trigger k.mother 14-step ArAction flow"
+      - "Check policy constraints (rate limits, resource quotas, blacklist)"
+    
+    hook_points:
+      - "HP_CLIE_CORE_AUTH (authentication)"
+      - "HP_CLIE_CORE_ASC_CHECK (ASC weight verification)"
+      - "HP_NAMESPACE_VALIDATE_HA/HO/GO/CO (namespace-specific validation)"
+      - "HP_CLIE_COG_RISK (risk assessment)"
+  
+  stage_5_execution:
+    name: "Command Execution & Reality Manipulation"
+    duration: "Variable (< 50ms local, < 5s remote)"
+    
+    steps:
+      - "If local (HA): execute directly on ARE"
+      - "If remote (HO/GO/CO): initiate SIPE teleport"
+      - "Track execution state (pending → running → success/fail)"
+      - "Handle errors with retry logic (3 attempts, exponential backoff)"
+    
+    hook_points:
+      - "HP_CLIE_CORE_DISPATCH (command dispatch)"
+      - "HP_CLIE_ACT_AR_PRE (ArAction submission)"
+      - "HP_CLIE_ACT_TELEPORT_PRE (teleport initiation)"
+      - "HP_CLIE_ACT_ARE (ARE execution)"
+  
+  stage_6_evidence_generation:
+    name: "Proof Creation & Ledger Recording"
+    duration: "< 100ms"
+    
+    steps:
+      - "Generate REP (Reality Evidence Particle)"
+      - "Include: command, actor, timestamp, result, resources consumed"
+      - "Store REP in ho://airoz/rep/ (90-day retention)"
+      - "If significant: mint VAP, schedule fossilization"
+    
+    hook_points:
+      - "HP_CLIE_ACT_AR_POST (post-execution)"
+      - "HP_CLIE_ACT_TELEPORT_POST (post-teleport)"
+      - "HP_CLIE_COG_MEMORY_SET (store in history)"
+  
+  stage_7_feedback:
+    name: "User Feedback & Notification"
+    duration: "< 300ms"
+    
+    steps:
+      - "Format result for output modality (text, voice, AR)"
+      - "If voice mode: Gemini TTS → audio (< 150ms)"
+      - "Display result to user"
+      - "If error: suggest correction or alternative"
+    
+    hook_points:
+      - "HP_CLIE_SENSE_TALK_PRE (TTS preparation)"
+      - "HP_CLIE_SENSE_TALK_POST (audio delivery)"
+
+# =====================================================================
+# PART V: ARCHITECTURAL PATTERNS
+# =====================================================================
+
+architectural_patterns:
+  
+  pattern_1_hook_driven:
+    name: "Hook-Driven Extension Pattern"
+    description: |
+      Hace CLI doesn't use traditional "plugin" architecture.
+      Instead, every extension point is a CONSTITUTIONAL HOOK.
+      Vendors register NEPs (Nano Engine Parts) into hooks.
+      Hooks are immutable, NEPs are dynamic.
+    
+    example: |
+      # FEM (Fractal Engine Module) - ROYAL/LEVEL 1 ONLY
+      FEM-CLIE-SENSE/voice.ail:
+        hooks:
+          - HP_CLIE_SENSE_VOICE_PRE
+          - HP_CLIE_SENSE_VOICE_POST
+          - HP_CLIE_SENSE_VOICE_INTENT
+      
+      # NEP (Nano Engine Part) - VENDOR LEVEL 2-4
+      NEP plg-vietnamese-accent.ail:
+        registers_into: HP_CLIE_SENSE_VOICE_PRE
+        function: enhance_vietnamese_tone_recognition()
+        vendor: VinAI (Level 2)
+    
+    benefits:
+      - "Stable core (FEM never changes arbitrarily)"
+      - "Infinite extensibility (NEPs can be added/removed)"
+      - "Security by design (NEPs sandboxed, audited)"
+  
+  pattern_2_teleport_first:
+    name: "Teleport-First Execution Pattern"
+    description: |
+      Hace CLI doesn't "call remote APIs".
+      It teleports CAPABILITY from HO to HA, executes locally, returns proof.
+      This is fundamentally different from REST/RPC.
+    
+    comparison: |
+      # Traditional REST API
+      POST https://api.example.com/v1/users
+      Body: {"name": "John"}
+      Response: {"id": 123, "name": "John"}
+      
+      # Hace CLI Teleport
+      hace ho:r:get --fap ho://r/cep/user-creator.ae
+        → SIPE teleports CEP from HO to HA://d/
+        → ARE executes CEP locally
+        → Generates REP with result
+        → Auto-cleanup HA://d/ after execution
+    
+    benefits:
+      - "No server dependency during execution"
+      - "End-to-end encryption by default"
+      - "Works offline (with cached CEPs)"
+      - "Immutable proof trail (REP)"
+  
+  pattern_3_namespace_fractal:
+    name: "Fractal Namespace Pattern"
+    description: |
+      Namespaces are RECURSIVE, not flat.
+      "ho:r:list" isn't just "ho" with sub-command "r".
+      It's a FRACTAL PATH through constitutional spaces.
+    
+    fractal_example: |
+      ho:                     # Space
+        r:                    # Sub-namespace (resource)
+          list                # Action
+            --owner           # Filter
+              <AID>           # Value
+                --sec         # Sub-filter
+                  protected   # Sub-value
+      
+      Resolution chain:
+      ho:r:list --owner AID-0xV --sec protected
+        → ho://r/ars-*/?owner=AID-0xV&sec=protected
+        → FAP resolution
+        → Teleport
+        → Execute
+        → Return
+    
+    benefits:
+      - "Infinite depth without namespace collision"
+      - "Self-documenting (namespace reveals intent)"
+      - "Auto-discovery (list all sub-namespaces)"
+
+# =====================================================================
+# PART VI: INTEGRATION POINTS
+# =====================================================================
+
+integration_points:
+  
+  with_gemini:
+    description: "Gemini 3 Flash is the NATIVE NLU/TTS/STT engine"
+    integration_type: "Deep (embedded in FEM-SENSE)"
+    
+    use_cases:
+      - "Voice command: 'Check vulnerabilities' → hace hole:scan"
+      - "Voice response: 'Found 3 P2 and 1 P1 vulnerability'"
+      - "Intent parsing: 'Deploy new version' → hace teleport:fn with auto-inferred args"
+    
+    performance:
+      - "STT latency: < 200ms"
+      - "TTS latency: < 150ms"
+      - "Intent confidence: 0.94 average"
+  
+  with_k_mother:
+    description: "k.mother is the judicial engine for all T3+ actions"
+    integration_type: "Mandatory for governance & high-authority commands"
+    
+    workflow: |
+      1. Hace CLI receives T4 command
+      2. Creates ArAction struct
+      3. Submits to k.mother via HP_CLIE_ACT_AR_PRE
+      4. k.mother runs 14-step validation
+      5. If approved: executes, generates FEH seal
+      6. If rejected: returns verdict with reason
+      7. Hace CLI shows verdict to user
+    
+    commands_requiring_k_mother:
+      - "go:p:enforce (T4)"
+      - "go:c:amend (T5)"
+      - "ho:r:transfer (T4)"
+      - "ho:orion:summon (T4)"
+  
+  with_cafe_os:
+    description: "CAFE OS enforces real-world constraints"
+    integration_type: "Automatic for resource-intensive commands"
+    
+    checks:
+      - "Credible: ZE Proof of resource availability"
+      - "Accountable: Header Legal for cross-border commands"
+      - "Federated: Multi-AO coordination"
+      - "Enforced: Physical actuation (lock doors, control valves)"
+  
+  with_hole_macro:
+    description: "HOLE Macro detects anomalies & attacks"
+    integration_type: "Passive monitoring + active blocking"
+    
+    detection_scenarios:
+      - "Voice injection attack (fake Gà Tổng voice)"
+      - "Suspicious command frequency (> 1000/min from T2 actor)"
+      - "Namespace violation attempt (ti: prefix)"
+      - "Privilege escalation attempt (T2 trying T5 command)"
+    
+    response:
+      - "Block command immediately"
+      - "Log to ho://airoz/audit/cli/security/"
+      - "Decrease actor Trust Score"
+      - "Notify T4+ administrators"
+
+# =====================================================================
+# PART VII: DEPLOYMENT & OPERATIONAL MODEL
+# =====================================================================
+
+deployment:
+  
+  installation:
+    method: "Auto-deployed with ARE (Atom Reality Engine)"
+    platforms: ["Linux (Ubuntu 24)", "Windows 11+", "macOS 14+", "Android 12+", "iOS 16+"]
+    
+    binary_locations:
+      linux: "/usr/local/bin/hace"
+      windows: "C:\\Program Files\\Alfa Alliance\\hace.exe"
+      macos: "/Applications/Alfa Alliance.app/Contents/MacOS/hace"
+      mobile: "Built into Alfa Alliance mobile app"
+  
+  configuration:
+    config_file: "ha://ate/config/hace-cli.toml"
+    protected: true # TEE-secured, cannot be edited by malware
+    
+    key_settings:
+      - "default_namespace: ha (local-first)"
+      - "voice_engine: gemini-3-flash"
+      - "confirmation_mode: smart (auto for T2, prompt for T3+)"
+      - "audit_level: medium (log T3+ commands)"
+      - "teleport_timeout: 5000ms"
+  
+  updates:
+    mechanism: "Auto-update via SIPE teleport"
+    frequency: "Weekly (patch), Monthly (feature), Quarterly (major)"
+    rollback: "Automatic if health check fails"
+    
+    update_flow: |
+      1. HO publishes new CLIE version
+      2. HA detects update available (via heartbeat)
+      3. Downloads new version to ha://d/tmp/
+      4. Verifies FEH seal from k.mother
+      5. Stops old CLIE gracefully
+      6. Replaces binary
+      7. Starts new CLIE
+      8. Health check (30 seconds)
+      9. If fail: rollback to previous version
+      10. If success: delete old version, update config
+
+# =====================================================================
+# PART VIII: SECURITY MODEL
+# =====================================================================
+
+security_model:
+  
+  threat_model:
+    
+    threat_1_command_injection:
+      description: "Attacker crafts malicious command string"
+      mitigation: |
+        - All user input sanitized before parsing
+        - No shell eval() or exec() - pure parser
+        - Voice commands require biometric if T3+
+    
+    threat_2_privilege_escalation:
+      description: "T2 actor tries to execute T4 command"
+      mitigation: |
+        - k.mother validates every T3+ command
+        - Authority gates enforced at multiple layers
+        - Trust Score deduction for repeated attempts
+    
+    threat_3_replay_attack:
+      description: "Attacker replays captured ArAction"
+      mitigation: |
+        - Every ArAction has unique nonce + timestamp
+        - k.mother rejects duplicate ArAction IDs
+        - Session tokens expire after 1 hour
+    
+    threat_4_voice_deepfake:
+      description: "AI-generated voice impersonates user"
+      mitigation: |
+        - Gemini voice biometric (multi-factor)
+        - Liveness detection (challenge-response)
+        - HOLE Macro pattern analysis
+  
+  encryption:
+    at_rest: "AES-256-GCM for ha://ate/"
+    in_transit: "TLS 1.3 + end-to-end for teleport packets"
+    keys: "HSM-backed, never leave TEE"
+  
+  audit_trail:
+    storage: "ho://airoz/audit/cli/"
+    retention: "7 years (immutable)"
+    
+    logged_events:
+      - "All T3+ commands (full command string)"
+      - "All teleport operations"
+      - "All authority failures"
+      - "All namespace violations"
+      - "All voice commands (transcript only, not audio)"
+
+# =====================================================================
+# END OF OVERVIEW
+# =====================================================================
+
+references:
+  - title: "Hace CLI Hook Standard"
+    fap: "go://p/m/cli-hook-standard.ail@v1.0.0"
+  
+  - title: "HA-CLIE Macro Engine"
+    fap: "ha://e/clie/macro.ail@v1.0.0"
+  
+  - title: "Master Hook Map"
+    fap: "ho://r/arc/csa/k/map/master-hooks.ail@v1.0.0"
+  
+  - title: "Namespace Map (Patch v1.3.1)"
+    fap: "ha://e/clie/registry/namespace-map.ail@v1.3.1"
+
+training_notes_for_aia: |
+  This overview document is designed for AIA experts to:
+  1. Understand Hace CLI's role in the ROS ecosystem
+  2. Learn the philosophical foundations (local-first, evidence-first, etc.)
+  3. Master command anatomy and lifecycle
+  4. Recognize architectural patterns (hook-driven, teleport-first, fractal)
+  5. Integrate with other macro engines (k.mother, CAFE, HOLE)
+  
+  Recommended reading order:
+  1. Executive Summary (understand what/why)
+  2. Philosophical Foundation (understand how to think)
+  3. Command Anatomy (understand syntax)
+  4. Command Lifecycle (understand flow)
+  5. Architectural Patterns (understand design)
+  6. Integration Points (understand ecosystem)
+  7. Security Model (understand constraints)
+  
+  After reading this, proceed to:
+  - hace-cli-logic.ail (Laravel Artisan inspiration)
+  - hace-cli-clie-engine.ail (CLIE macro engine details)
+  - hace-cli-hookpoints.ail (Hook point catalog)
+```

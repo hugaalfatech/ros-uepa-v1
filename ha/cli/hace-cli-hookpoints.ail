@@ -1,0 +1,748 @@
+# HACE CLI - HOOK POINTS CATALOG v1.0.0
+
+```yaml
+# =====================================================================
+# HACE CLI HOOK POINTS CATALOG
+# Complete Reference with Examples & Use Cases
+# =====================================================================
+
+metadata:
+  id: "doc-hace-cli-hookpoints-v1"
+  version: "1.0.0"
+  type: "training-documentation"
+  language: "english"
+  format: "ail-hybrid"
+  audience: "AIA-vendors"
+  fap: "ho://know/kip/hace-cli/hookpoints.ail@v1.0.0"
+  
+  seal:
+    authority: "T5-CSA-APPROVED"
+    timestamp: "2026-02-14T17:15:00Z"
+    parent_docs:
+      - "ho://know/kip/hace-cli/overview.ail@v1.0.0"
+      - "ho://know/kip/hace-cli/logic.ail@v1.0.0"
+      - "ho://know/kip/hace-cli/clie-engine.ail@v1.0.0"
+
+# =====================================================================
+# PART I: HOOK POINT TAXONOMY
+# =====================================================================
+
+taxonomy:
+  
+  total_hook_points: 30
+  
+  by_fem_module:
+    CORE: 6
+    SENSE: 11
+    COG: 7
+    ACT: 6
+  
+  by_execution_type:
+    synchronous: 18  # Must complete before proceeding
+    asynchronous: 12  # Fire-and-forget or queued
+  
+  by_vendor_level:
+    level_1_2: 30  # All hooks available to Enterprise+
+    level_3: 24    # Excluding security-critical hooks
+    level_4: 8     # Only UI/visualization hooks
+
+# =====================================================================
+# PART II: CORE HOOKS (FEM-CORE)
+# =====================================================================
+
+core_hooks:
+  
+  HP_CLIE_CORE_PARSE_PRE:
+    id: "HP_CLIE_CORE_PARSE_PRE"
+    name: "Pre-Parse Command Hook"
+    fem: "CLIE-CORE/parser"
+    
+    description: "Invoked BEFORE parsing command string"
+    
+    execution: "synchronous"
+    timeout_ms: 50
+    priority_range: "1-100 (lower = earlier)"
+    
+    allowed_nep_types: ["plg-", "sec-"]
+    vendor_level_min: 2
+    
+    interface: |
+      function preParseHook(raw_input: RawInput) -> HookResult {
+        // raw_input: { command: String, session: SessionData }
+        // return: { continue: bool, modified_command?: String, error?: String }
+      }
+    
+    use_cases:
+      
+      case_1_custom_syntax:
+        vendor: "Enterprise Corp (Level 2)"
+        nep_fap: "ho://milky/nep/clie/core/enterprise/plg-custom-syntax.ail"
+        
+        purpose: |
+          Allow company-specific command aliases
+          Example: "deploy staging" → "hace teleport:fn --from ho://r/cep/app --to staging"
+        
+        implementation: |
+          function preParseHook(raw_input) {
+            if raw_input.command.startsWith("deploy"):
+              target = extract_target(raw_input.command)
+              return {
+                continue: true,
+                modified_command: f"hace teleport:fn --from ho://r/cep/app --to {target}"
+              }
+            return { continue: true }
+          }
+      
+      case_2_security_filter:
+        vendor: "Security Auditors Inc (Level 1)"
+        nep_fap: "ho://milky/nep/clie/core/security/sec-malicious-pattern.ail"
+        
+        purpose: "Block commands with known malicious patterns"
+        
+        implementation: |
+          function preParseHook(raw_input) {
+            malicious_patterns = ["; rm -rf", "| nc", "$(whoami)"]
+            
+            for pattern in malicious_patterns:
+              if raw_input.command.contains(pattern):
+                log_security_event(raw_input)
+                return {
+                  continue: false,
+                  error: "Command contains suspicious pattern"
+                }
+            
+            return { continue: true }
+          }
+  
+  HP_CLIE_CORE_PARSE_POST:
+    id: "HP_CLIE_CORE_PARSE_POST"
+    name: "Post-Parse Success Hook"
+    fem: "CLIE-CORE/parser"
+    
+    description: "Invoked AFTER successful parsing"
+    
+    execution: "asynchronous"
+    timeout_ms: 100
+    
+    allowed_nep_types: ["plg-", "aud-"]
+    vendor_level_min: 3
+    
+    interface: |
+      function postParseHook(parsed: ParsedCommand) -> void {
+        // parsed: { namespace, action, flags, session }
+        // return: void (fire-and-forget logging/metrics)
+      }
+    
+    use_cases:
+      
+      case_1_usage_analytics:
+        vendor: "Analytics Platform (Level 3)"
+        nep_fap: "ho://milky/nep/clie/core/analytics/plg-command-metrics.ail"
+        
+        purpose: "Track command usage for UX improvement"
+        
+        implementation: |
+          function postParseHook(parsed) {
+            metrics.increment(f"command.{parsed.namespace}.{parsed.action}")
+            metrics.gauge("command.flags_count", parsed.flags.length)
+            
+            if parsed.session.tier >= T3:
+              metrics.increment("command.high_authority")
+          }
+  
+  HP_CLIE_CORE_FAP_RESOLVE:
+    id: "HP_CLIE_CORE_FAP_RESOLVE"
+    name: "FAP Resolution Hook"
+    fem: "CLIE-CORE/parser"
+    
+    description: "Invoked when resolving FAP references"
+    
+    execution: "synchronous"
+    timeout_ms: 30
+    
+    allowed_nep_types: ["plg-", "adt-"]
+    vendor_level_min: 2
+    
+    interface: |
+      function fapResolveHook(fap_ref: String) -> FapResult {
+        // fap_ref: "go://k/p/energy-save" (may be partial)
+        // return: { resolved_fap: String, version?: String }
+      }
+    
+    use_cases:
+      
+      case_1_version_pinning:
+        vendor: "DevOps Tools Inc (Level 2)"
+        nep_fap: "ho://milky/nep/clie/core/devops/plg-version-pin.ail"
+        
+        purpose: "Auto-pin FAPs to specific versions for reproducibility"
+        
+        implementation: |
+          function fapResolveHook(fap_ref) {
+            # Check if version pinning config exists
+            pin_config = load_config("ha://ate/config/fap-pins.toml")
+            
+            if fap_ref in pin_config:
+              pinned_version = pin_config[fap_ref]
+              return {
+                resolved_fap: f"{fap_ref}@{pinned_version}"
+              }
+            
+            # Fallback to latest
+            return { resolved_fap: f"{fap_ref}@latest" }
+          }
+  
+  HP_CLIE_CORE_AUTH:
+    id: "HP_CLIE_CORE_AUTH"
+    name: "Authentication Hook"
+    fem: "CLIE-CORE/session"
+    
+    description: "Invoked when authenticating actor"
+    
+    execution: "synchronous"
+    timeout_ms: 100
+    
+    allowed_nep_types: ["sec-"]
+    vendor_level_min: 1  # Security-critical, Level 1-2 only
+    
+    interface: |
+      function authHook(credentials: AuthData) -> AuthResult {
+        // credentials: { method: String, data: Any }
+        // return: { authenticated: bool, aid?: AID, tier?: Tier }
+      }
+    
+    use_cases:
+      
+      case_1_hardware_token:
+        vendor: "YubiKey Integration (Level 1)"
+        nep_fap: "ho://milky/nep/clie/core/yubikey/sec-yubikey-auth.ail"
+        
+        purpose: "Support YubiKey 2FA for T4+ commands"
+        
+        implementation: |
+          function authHook(credentials) {
+            if credentials.method != "yubikey":
+              return { authenticated: false }
+            
+            # Challenge-response with YubiKey device
+            challenge = generate_random_challenge()
+            response = yubikey_device.challenge(challenge)
+            
+            if verify_response(challenge, response):
+              aid = get_aid_from_yubikey(response)
+              return {
+                authenticated: true,
+                aid: aid,
+                tier: get_tier(aid)
+              }
+            
+            return { authenticated: false }
+          }
+  
+  HP_CLIE_CORE_ASC_CHECK:
+    id: "HP_CLIE_CORE_ASC_CHECK"
+    name: "ASC Weight Verification Hook"
+    fem: "CLIE-CORE/session"
+    
+    description: "Invoked for governance actions requiring ASC consensus"
+    
+    execution: "synchronous"
+    timeout_ms: 50
+    
+    allowed_nep_types: ["sec-", "aud-"]
+    vendor_level_min: 2
+    
+    interface: |
+      function ascCheckHook(action: GovernanceAction) -> AscResult {
+        // action: { command, actor, required_weight }
+        // return: { sufficient: bool, actual_weight: f32 }
+      }
+    
+    use_cases:
+      
+      case_1_dynamic_weight:
+        vendor: "Governance DAO (Level 2)"
+        nep_fap: "ho://milky/nep/clie/core/gov/sec-dynamic-asc.ail"
+        
+        purpose: "Calculate real-time ASC weight based on active Council members"
+        
+        implementation: |
+          function ascCheckHook(action) {
+            # Query active Council members
+            active_council = query_active_council()
+            
+            # Get weight contributions
+            weights = {
+              HI: sum([m.weight for m in active_council if m.role == "HI"]),
+              SW: sum([m.weight for m in active_council if m.role == "SW"]),
+              HW: sum([m.weight for m in active_council if m.role == "HW"]),
+              OS: sum([m.weight for m in active_council if m.role == "OS"])
+            }
+            
+            actual_weight = (weights.HI * 0.4 + weights.SW * 0.25 +
+                            weights.HW * 0.2 + weights.OS * 0.15)
+            
+            return {
+              sufficient: actual_weight >= action.required_weight,
+              actual_weight: actual_weight
+            }
+          }
+  
+  HP_CLIE_CORE_DISPATCH:
+    id: "HP_CLIE_CORE_DISPATCH"
+    name: "Command Dispatch Hook"
+    fem: "CLIE-CORE/executor"
+    
+    description: "Invoked BEFORE dispatching command to executor"
+    
+    execution: "synchronous"
+    timeout_ms: 50
+    
+    allowed_nep_types: ["plg-", "aud-", "viz-"]
+    vendor_level_min: 3
+    
+    interface: |
+      function dispatchHook(command: ExecutableCommand) -> DispatchResult {
+        // command: { action, args, executor, session }
+        // return: { proceed: bool, error?: String }
+      }
+    
+    use_cases:
+      
+      case_1_rate_limiting:
+        vendor: "Rate Limiter Service (Level 3)"
+        nep_fap: "ho://milky/nep/clie/core/ratelimit/plg-rate-limiter.ail"
+        
+        purpose: "Enforce per-user command rate limits"
+        
+        implementation: |
+          function dispatchHook(command) {
+            rate_limit = get_rate_limit(command.session.tier)
+            
+            current_rate = get_command_count(
+              command.session.aid,
+              window_seconds=60
+            )
+            
+            if current_rate >= rate_limit:
+              return {
+                proceed: false,
+                error: f"Rate limit exceeded: {rate_limit} commands/min"
+              }
+            
+            return { proceed: true }
+          }
+
+# =====================================================================
+# PART III: SENSE HOOKS (FEM-SENSE)
+# =====================================================================
+
+sense_hooks:
+  
+  HP_CLIE_SENSE_VOICE_PRE:
+    id: "HP_CLIE_SENSE_VOICE_PRE"
+    name: "Pre-Voice Processing Hook"
+    fem: "CLIE-SENSE/voice"
+    
+    description: "Invoked BEFORE sending audio to Gemini STT"
+    
+    execution: "synchronous"
+    timeout_ms: 100
+    
+    allowed_nep_types: ["sec-", "adt-"]
+    vendor_level_min: 2
+    
+    interface: |
+      function preVoiceHook(audio_stream: AudioData) -> HookResult {
+        // audio_stream: { samples: PCM16[], sample_rate: 16000 }
+        // return: { continue: bool, modified_audio?: AudioData }
+      }
+    
+    use_cases:
+      
+      case_1_noise_reduction:
+        vendor: "Audio Processing Co (Level 2)"
+        nep_fap: "ho://milky/nep/clie/sense/audio/adt-noise-reduction.ail"
+        
+        purpose: "Remove background noise before STT"
+        
+        implementation: |
+          function preVoiceHook(audio_stream) {
+            # Apply noise reduction filter
+            filtered_audio = apply_spectral_subtraction(audio_stream)
+            
+            return {
+              continue: true,
+              modified_audio: filtered_audio
+            }
+          }
+      
+      case_2_voice_biometric:
+        vendor: "Voice Security (Level 1)"
+        nep_fap: "ho://milky/nep/clie/sense/voice/sec-voice-biometric.ail"
+        
+        purpose: "Verify speaker identity via voice biometric"
+        
+        implementation: |
+          function preVoiceHook(audio_stream) {
+            voiceprint = extract_voiceprint(audio_stream)
+            expected_voiceprint = load_voiceprint(session.aid)
+            
+            similarity = compare_voiceprints(voiceprint, expected_voiceprint)
+            
+            if similarity < 0.85:
+              log_security_event("voice_mismatch")
+              return {
+                continue: false,
+                error: "Voice authentication failed"
+              }
+            
+            return { continue: true }
+          }
+  
+  HP_CLIE_SENSE_VOICE_INTENT:
+    id: "HP_CLIE_SENSE_VOICE_INTENT"
+    name: "Voice Intent Resolution Hook"
+    fem: "CLIE-SENSE/voice"
+    
+    description: "Invoked to convert voice transcript to command intent"
+    
+    execution: "synchronous"
+    timeout_ms: 350
+    
+    allowed_nep_types: ["alg-", "plg-"]
+    vendor_level_min: 2
+    
+    interface: |
+      function intentHook(transcript: String) -> IntentResult {
+        // transcript: "Check if there are security holes in Vendor A"
+        // return: { intent: String, confidence: f32, params: Map }
+      }
+    
+    use_cases:
+      
+      case_1_domain_intent:
+        vendor: "Medical AI (Level 2)"
+        nep_fap: "ho://milky/nep/clie/sense/medical/alg-medical-intent.ail"
+        
+        purpose: "Understand medical domain commands"
+        
+        implementation: |
+          function intentHook(transcript) {
+            # Custom medical NLU model
+            medical_terms = extract_medical_entities(transcript)
+            
+            if "patient" in medical_terms and "record" in medical_terms:
+              patient_id = extract_patient_id(transcript)
+              return {
+                intent: "PATIENT_RECORD_QUERY",
+                confidence: 0.92,
+                params: {
+                  patient_id: patient_id,
+                  action: "hace ho:know:search --query 'patient {patient_id}'"
+                }
+              }
+            
+            # Fallback to general Gemini
+            return gemini_intent_parse(transcript)
+          }
+
+# =====================================================================
+# PART IV: COGNITIVE HOOKS (FEM-COG)
+# =====================================================================
+
+cognitive_hooks:
+  
+  HP_CLIE_COG_RISK:
+    id: "HP_CLIE_COG_RISK"
+    name: "Risk Assessment Hook"
+    fem: "CLIE-COG/reasoning"
+    
+    description: "Invoked to assess command risk score"
+    
+    execution: "synchronous"
+    timeout_ms: 200
+    
+    allowed_nep_types: ["alg-", "plg-", "sec-"]
+    vendor_level_min: 2
+    
+    interface: |
+      function riskHook(command: ParsedCommand) -> RiskScore {
+        // command: { action, params, actor }
+        // return: { score: f32 (0.0-1.0), factors: Map }
+      }
+    
+    use_cases:
+      
+      case_1_financial_risk:
+        vendor: "FinTech Risk Engine (Level 2)"
+        nep_fap: "ho://milky/nep/clie/cog/fintech/alg-financial-risk.ail"
+        
+        purpose: "Assess financial transaction risk"
+        
+        implementation: |
+          function riskHook(command) {
+            if command.action != "ho:r:transfer":
+              return { score: 0.0, factors: {} }
+            
+            # Get resource value
+            resource_value = get_resource_value(command.params.fap)
+            
+            # Get actor trust score
+            actor_trust = get_trust_score(command.actor.aid)
+            
+            # Get target reputation
+            target_rep = get_reputation(command.params.to)
+            
+            # Calculate risk
+            value_factor = min(resource_value / 1000000, 0.5)
+            trust_factor = (1000 - actor_trust) / 1000 * 0.3
+            rep_factor = (850 - target_rep) / 850 * 0.2
+            
+            risk_score = value_factor + trust_factor + rep_factor
+            
+            return {
+              score: risk_score,
+              factors: {
+                value: value_factor,
+                trust: trust_factor,
+                reputation: rep_factor
+              }
+            }
+          }
+
+# =====================================================================
+# PART V: ACTION HOOKS (FEM-ACT)
+# =====================================================================
+
+action_hooks:
+  
+  HP_CLIE_ACT_AR_PRE:
+    id: "HP_CLIE_ACT_AR_PRE"
+    name: "Pre-ArAction Submission Hook"
+    fem: "CLIE-ACT/ar"
+    
+    description: "Invoked BEFORE submitting ArAction to k.mother"
+    
+    execution: "synchronous"
+    timeout_ms: 100
+    
+    allowed_nep_types: ["plg-", "sec-", "aud-"]
+    vendor_level_min: 2
+    
+    interface: |
+      function preArHook(action: ArAction) -> HookResult {
+        // action: { command, actor, timestamp, nonce, signature }
+        // return: { continue: bool, modified_action?: ArAction }
+      }
+    
+    use_cases:
+      
+      case_1_compliance_metadata:
+        vendor: "Compliance Auditor (Level 2)"
+        nep_fap: "ho://milky/nep/clie/act/compliance/aud-sox-metadata.ail"
+        
+        purpose: "Add SOX compliance metadata to ArActions"
+        
+        implementation: |
+          function preArHook(action) {
+            # Enrich ArAction with compliance data
+            action.metadata.compliance = {
+              regulation: "SOX",
+              justification: get_justification(action.actor),
+              approver: get_approver(action.command),
+              timestamp: utc_now()
+            }
+            
+            return {
+              continue: true,
+              modified_action: action
+            }
+          }
+  
+  HP_CLIE_ACT_TELEPORT_PRE:
+    id: "HP_CLIE_ACT_TELEPORT_PRE"
+    name: "Pre-Teleport Hook"
+    fem: "CLIE-ACT/teleport"
+    
+    description: "Invoked BEFORE initiating teleport"
+    
+    execution: "synchronous"
+    timeout_ms: 150
+    
+    allowed_nep_types: ["sec-", "plg-"]
+    vendor_level_min: 2
+    
+    interface: |
+      function preTeleportHook(request: TeleportRequest) -> HookResult {
+        // request: { source_fap, target_fap, payload }
+        // return: { continue: bool, modified_request?: TeleportRequest }
+      }
+    
+    use_cases:
+      
+      case_1_encryption_upgrade:
+        vendor: "Quantum Security (Level 1)"
+        nep_fap: "ho://milky/nep/clie/act/quantum/sec-quantum-encrypt.ail"
+        
+        purpose: "Upgrade teleport encryption to post-quantum"
+        
+        implementation: |
+          function preTeleportHook(request) {
+            # Upgrade to quantum-safe encryption
+            request.encryption = {
+              algorithm: "CRYSTALS-Kyber",
+              key_size: 3072
+            }
+            
+            return {
+              continue: true,
+              modified_request: request
+            }
+          }
+
+# =====================================================================
+# PART VI: NAMESPACE HOOKS
+# =====================================================================
+
+namespace_hooks:
+  
+  HP_NAMESPACE_AUDIT_TELEPORT:
+    id: "HP_NAMESPACE_AUDIT_TELEPORT"
+    name: "Teleport Audit Hook"
+    fem: "HA-CLIE-HP/namespace-map"
+    
+    description: "Invoked after successful teleport"
+    
+    execution: "asynchronous"
+    timeout_ms: 200
+    
+    allowed_nep_types: ["aud-"]
+    vendor_level_min: 3
+    
+    interface: |
+      function teleportAuditHook(event: TeleportEvent) -> void {
+        // event: { namespace, command, duration_ms, result }
+        // return: void (logging only)
+      }
+    
+    use_cases:
+      
+      case_1_compliance_logging:
+        vendor: "Enterprise Audit (Level 3)"
+        nep_fap: "ho://milky/nep/clie/namespace/enterprise/aud-teleport-log.ail"
+        
+        purpose: "Log all teleports for compliance"
+        
+        implementation: |
+          function teleportAuditHook(event) {
+            audit_record = {
+              timestamp: utc_now(),
+              actor: event.actor,
+              namespace: event.namespace,
+              command: event.command,
+              duration_ms: event.duration_ms,
+              result: event.result,
+              network_origin: get_network_origin()
+            }
+            
+            store_audit_record("ha://d/audit/teleport/", audit_record)
+            
+            if event.namespace == "GO":
+              # Governance actions need special attention
+              notify_compliance_team(audit_record)
+          }
+
+# =====================================================================
+# PART VII: CONCLUSION
+# =====================================================================
+
+conclusion:
+  
+  summary: |
+    This catalog documents 30 constitutional hook points in Hace CLI.
+    Each hook point serves a specific purpose in the command lifecycle.
+    Vendors extend Hace CLI by registering NEPs into these hooks.
+    
+    Key principles:
+    1. FEM (hooks) are immutable and royal-controlled
+    2. NEP (extensions) are dynamic and vendor-contributed
+    3. Priority determines execution order (1 = first)
+    4. Timeouts ensure no hook blocks pipeline indefinitely
+    5. Synchronous hooks must complete; async hooks are fire-and-forget
+  
+  vendor_quickstart:
+    
+    step_1_identify_hook:
+      guide: "Choose hook point matching your use case"
+      examples:
+        - "Voice enhancement → HP_CLIE_SENSE_VOICE_PRE"
+        - "Custom syntax → HP_CLIE_CORE_PARSE_PRE"
+        - "Risk scoring → HP_CLIE_COG_RISK"
+        - "Audit logging → HP_NAMESPACE_AUDIT_TELEPORT"
+    
+    step_2_develop_nep:
+      guide: "Build NEP following interface specification"
+      template: |
+        metadata:
+          name: "my-custom-hook-handler"
+          type: "plg" # or alg, sec, aud, etc.
+          version: "1.0.0"
+          author: "MyCompany"
+          vendor_level: 2
+        
+        hooks:
+          - hook_id: "HP_CLIE_CORE_PARSE_PRE"
+            function: "my_pre_parse_logic"
+            priority: 50
+        
+        code:
+          # Implement function matching hook interface
+          function my_pre_parse_logic(raw_input) {
+            # Your logic here
+            return { continue: true }
+          }
+    
+    step_3_test_locally:
+      guide: "Test NEP in dev environment"
+      commands:
+        - "hace nep:create my-hook-handler --dry-run"
+        - "hace nep:test --fap ho://uni/draft/.../my-hook-handler.ail"
+    
+    step_4_submit:
+      guide: "Submit for review"
+      command: "hace nep:create my-hook-handler --submit"
+    
+    step_5_deploy:
+      guide: "After approval, link to production"
+      command: "hace nep:link --fap ho://milky/.../my-hook-handler.ail@v1.0.0 --hook HP_CLIE_CORE_PARSE_PRE"
+
+references:
+  - title: "Hace CLI Overview"
+    fap: "ho://know/kip/hace-cli/overview.ail@v1.0.0"
+  
+  - title: "Hace CLI Logic"
+    fap: "ho://know/kip/hace-cli/logic.ail@v1.0.0"
+  
+  - title: "CLIE Macro Engine"
+    fap: "ho://know/kip/hace-cli/clie-engine.ail@v1.0.0"
+  
+  - title: "Master Hook Map"
+    fap: "ho://r/arc/csa/k/map/master-hooks.ail@v1.0.0"
+
+training_notes_for_aia: |
+  This hook points catalog provides:
+  1. Complete reference of 30 hook points
+  2. Real-world use cases for each hook
+  3. Implementation examples from vendors
+  4. Quickstart guide for vendors
+  
+  Use this document to:
+  - Understand where to extend Hace CLI
+  - Learn hook interfaces and contracts
+  - See production examples from other vendors
+  - Follow best practices for NEP development
+  
+  This is the FINAL document in Hace CLI series.
+  Vendors should now have complete knowledge to build NEPs.
+```

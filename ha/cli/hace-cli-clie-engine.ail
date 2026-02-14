@@ -1,0 +1,860 @@
+# HACE CLI - CLIE MACRO ENGINE v1.0.0
+
+```yaml
+# =====================================================================
+# HA-CLIE MACRO ENGINE - INTERNAL ARCHITECTURE
+# FEM Modules, Processing Pipeline, Integration Points
+# =====================================================================
+
+metadata:
+  id: "doc-hace-cli-clie-v1"
+  version: "1.0.0"
+  type: "training-documentation"
+  language: "english"
+  format: "ail-hybrid"
+  audience: "AIA-architects"
+  fap: "ho://know/kip/hace-cli/clie-engine.ail@v1.0.0"
+  
+  seal:
+    authority: "T5-CSA-APPROVED"
+    timestamp: "2026-02-14T17:00:00Z"
+    parent_docs:
+      - "ho://know/kip/hace-cli/overview.ail@v1.0.0"
+      - "ho://know/kip/hace-cli/logic.ail@v1.0.0"
+
+# =====================================================================
+# PART I: CLIE ENGINE ARCHITECTURE
+# =====================================================================
+
+clie_architecture:
+  
+  engine_definition:
+    what_is_clie: |
+      HA-CLIE (High Authority - CLI Engine) is the MACRO ENGINE that powers
+      Hace CLI. It's not just a command parser - it's a complete reality
+      manipulation framework with 5 layers:
+      
+      Layer 1: SPINE (Core) - Parsing, Session, Execution
+      Layer 2: SENSE (Sensory) - Voice, Vision, Gesture, IoT
+      Layer 3: COG (Cognitive) - Intent, Context, Reasoning, Memory
+      Layer 4: NEP (Ecosystem) - Vendor extensions via hooks
+      Layer 5: ACT (Action) - ArAction, Teleport, ARE integration
+    
+    engine_fap: "ha://e/clie/macro.ail@v1.0.0"
+    authority: "Royal T4+ (manages), T5 (modifies)"
+    
+    execution_model: |
+      CLIE runs as a PERSISTENT DAEMON on every HA device:
+      - Starts with ARE boot
+      - Listens on multiple channels (stdin, voice, gesture, IoT)
+      - Processes commands asynchronously
+      - Maintains session state per actor
+      - Auto-recovers from crashes (< 5s downtime)
+  
+  fem_modules_overview:
+    
+    fem_spine:
+      code: "CLIE-CORE"
+      fap: "ha://e/clie/core/spine.ail"
+      sub_modules:
+        - parser: "ha://e/clie/core/parser.ail"
+        - session: "ha://e/clie/core/session.ail"
+        - executor: "ha://e/clie/core/executor.ail"
+      
+      responsibility: "Command parsing, session management, dispatch control"
+      performance_target: "< 10ms per operation, 10,000 ops/s throughput"
+    
+    fem_sense:
+      code: "CLIE-SENSE"
+      fap: "ha://e/clie/sense/mother.ail"
+      sub_modules:
+        - voice: "ha://e/clie/sense/voice.ail"
+        - talk: "ha://e/clie/sense/talk.ail"
+        - vision: "ha://e/clie/sense/vision.ail"
+        - iot: "ha://e/clie/sense/iot.ail"
+        - gesture: "ha://e/clie/sense/gesture.ail"
+      
+      responsibility: "Multi-modal input conversion to CLI commands"
+      performance_target: "< 500ms voice, < 1s vision, < 200ms gesture"
+    
+    fem_cog:
+      code: "CLIE-COG"
+      fap: "ha://e/clie/cog/brain.ail"
+      sub_modules:
+        - intent: "ha://e/clie/cog/intent.ail"
+        - context: "ha://e/clie/cog/context.ail"
+        - reasoning: "ha://e/clie/cog/reasoning.ail"
+        - memory: "ha://e/clie/cog/memory.ail"
+      
+      responsibility: "Natural language understanding, context awareness"
+      performance_target: "< 350ms intent parsing, < 50ms memory ops"
+    
+    fem_act:
+      code: "CLIE-ACT"
+      fap: "ha://e/clie/act/bridge.ail"
+      sub_modules:
+        - ar: "ha://e/clie/act/ar.ail"
+        - teleport: "ha://e/clie/act/teleport.ail"
+        - are: "ha://e/clie/act/are.ail"
+        - kmother: "ha://e/clie/act/kmother.ail"
+      
+      responsibility: "Reality execution, teleport coordination, governance bridge"
+      performance_target: "< 100ms AR submit, < 200ms teleport, < 30ms k.mother"
+
+# =====================================================================
+# PART II: PROCESSING PIPELINE
+# =====================================================================
+
+processing_pipeline:
+  
+  pipeline_diagram: |
+    Input (Text/Voice/Gesture/IoT)
+      ↓
+    [FEM-SENSE] Multi-modal normalization
+      ↓
+    [FEM-CORE/parser] Tokenization + Syntax check
+      ↓
+    [HP_NAMESPACE_DETECT_*] Namespace detection
+      ↓
+    [FEM-COG/intent] Intent parsing (if NLU needed)
+      ↓
+    [FEM-COG/context] Context enrichment
+      ↓
+    [HP_NAMESPACE_VALIDATE_*] Authority validation
+      ↓
+    [FEM-COG/reasoning] Risk assessment
+      ↓
+    [FEM-CORE/executor] Dispatch decision
+      ↓
+    [FEM-ACT] Execution (local or teleport)
+      ↓
+    [FEM-COG/memory] Store in history
+      ↓
+    [FEM-SENSE/talk] Feedback (if voice mode)
+      ↓
+    Output (Result + REP)
+  
+  detailed_stages:
+    
+    stage_input_normalization:
+      module: "FEM-SENSE"
+      purpose: "Convert ANY input modality to standard command struct"
+      
+      input_types:
+        
+        text_input:
+          source: "stdin, terminal, web UI"
+          processing: "Direct passthrough (already normalized)"
+          latency: "< 1ms"
+        
+        voice_input:
+          source: "Microphone, Gemini STT"
+          processing: |
+            1. Capture audio stream (PCM 16-bit, 16kHz)
+            2. Call HP_CLIE_SENSE_VOICE_PRE (NEP preprocessing)
+            3. Send to Gemini STT API (< 200ms)
+            4. Get transcript with confidence score
+            5. Call HP_CLIE_SENSE_VOICE_POST (NEP postprocessing)
+            6. Normalize transcript to command string
+          latency: "< 500ms end-to-end"
+          
+          voice_specific_handling:
+            - "Handles filler words ('uh', 'um') - auto-strip"
+            - "Handles Vietnamese tones - NEP enhancement"
+            - "Handles wake word detection - 'Hace' prefix optional"
+            - "Handles multi-turn conversation - context-aware"
+        
+        vision_input:
+          source: "Camera, AR headset, QR scanner"
+          processing: |
+            1. Capture image frame
+            2. Call HP_CLIE_SENSE_VISION_PRE
+            3. Detect visual command (QR code, gesture, scene)
+            4. Call Gemini Vision API if needed
+            5. Call HP_CLIE_SENSE_VISION_POST
+            6. Convert to command struct
+          latency: "< 1s"
+          
+          examples:
+            - "QR code: 'hace://ho:r:list?owner=AID-0xV' → command string"
+            - "AR gesture: Circle in air → hace teleport:fn ..."
+            - "Product image: Photo of bottle → hace market:search ..."
+        
+        iot_input:
+          source: "MQTT broker, CoAP gateway, sensor bridge"
+          processing: |
+            1. Receive sensor data packet
+            2. Call HP_CLIE_SENSE_IOT_INGEST
+            3. Evaluate rule engine (if temp > 40°C → alert)
+            4. Call HP_CLIE_SENSE_IOT_RULE
+            5. Generate command if rule triggers
+          latency: "< 100ms"
+          
+          examples:
+            - "Temperature sensor: 42°C → hace iot:alert --sensor rack-01"
+            - "Door sensor: Opened → hace iot:log --door front-gate"
+        
+        gesture_input:
+          source: "AR Core, MediaPipe, hand tracking"
+          processing: |
+            1. Detect hand/body pose
+            2. Call HP_CLIE_SENSE_GESTURE
+            3. Match against gesture library
+            4. Convert to command
+          latency: "< 200ms"
+          
+          examples:
+            - "Swipe right → hace orch:status"
+            - "Thumbs up → hace ar:submit --approve"
+            - "Pinch zoom → hace scale:up --factor 2"
+    
+    stage_parsing:
+      module: "FEM-CORE/parser"
+      purpose: "Convert command string to validated token struct"
+      
+      parsing_steps:
+        
+        step_1_tokenization:
+          input: "hace ho:r:list --owner AID-0xV --sec protected"
+          output: |
+            Tokens {
+              command_verb: "hace",
+              namespace: "ho",
+              sub_namespace: "r",
+              action: "list",
+              flags: [
+                Flag { name: "owner", value: "AID-0xV" },
+                Flag { name: "sec", value: "protected" }
+              ]
+            }
+          
+          hook_point: "HP_CLIE_CORE_PARSE_PRE (NEP can intercept)"
+        
+        step_2_syntax_validation:
+          checks:
+            - "Command verb must be 'hace'"
+            - "Namespace format: [a-z]+: or implicit HA"
+            - "Action format: [a-z_]+"
+            - "Flag format: --[a-z-]+ <value>"
+            - "No shell metacharacters (; | & $ ` < >)"
+          
+          on_failure: "Reject with syntax error, suggest fix"
+        
+        step_3_fap_resolution:
+          purpose: "Resolve FAP references in flags to full paths"
+          
+          example: |
+            Input flag: --fap go://k/p/energy-save
+            
+            Resolution:
+              1. Check local cache ha://d/fap-cache/
+              2. If not found, query HO via SIPE
+              3. Validate FAP format
+              4. Return resolved FAP: go://k/p/energy-save.ail@v1.0.0
+          
+          hook_point: "HP_CLIE_CORE_FAP_RESOLVE"
+        
+        step_4_namespace_detection:
+          purpose: "Determine target space via detector hooks"
+          
+          detector_priority_order:
+            1: "HP_NAMESPACE_DETECT_FORBIDDEN (reject ti:, pi:, eg:, ao:)"
+            2: "HP_NAMESPACE_DETECT_HA (implicit if no prefix)"
+            3: "HP_NAMESPACE_DETECT_HO (explicit ho:)"
+            4: "HP_NAMESPACE_DETECT_GO (explicit go:)"
+            5: "HP_NAMESPACE_DETECT_CO (explicit co:)"
+          
+          output: |
+            NamespaceResult {
+              namespace: "HO",
+              sub_namespace: "r",
+              teleport_required: true,
+              executor: "ti://e/a/sipe-teleport.ail"
+            }
+    
+    stage_intent_resolution:
+      module: "FEM-COG/intent"
+      purpose: "Understand user intent, especially for natural language"
+      
+      when_triggered:
+        - "Voice command with low confidence parse"
+        - "Ambiguous syntax (multiple interpretations)"
+        - "Unknown action (not in routing table)"
+        - "User explicitly uses natural language ('Can you...')"
+      
+      gemini_integration:
+        model: "gemini-3-flash-intent"
+        endpoint: "ti://e/gemini/intent.ail"
+        timeout: "350ms"
+        
+        request: |
+          {
+            "prompt": "Convert to Hace CLI command",
+            "user_input": "Check if there are any security holes in Vendor A's space",
+            "session_context": {
+              "recent_commands": ["hace nep:list", "hace orch:status"],
+              "current_space": "HA",
+              "user_tier": "T5"
+            }
+          }
+        
+        response: |
+          {
+            "intent": "SECURITY_SCAN",
+            "confidence": 0.94,
+            "suggested_command": "hace hole:scan --space ars-v --vendor vendor-a",
+            "parameters": {
+              "space": "ars-v",
+              "vendor": "vendor-a",
+              "severity": "all"
+            }
+          }
+      
+      hook_point: "HP_CLIE_COG_INTENT (NEPs can provide domain-specific intent)"
+    
+    stage_context_enrichment:
+      module: "FEM-COG/context"
+      purpose: "Add session context to command for smart defaults"
+      
+      context_sources:
+        
+        session_history:
+          stored_in: "ha://d/clie/sessions/<actor-aid>.db"
+          retention: "Last 100 commands or 24 hours"
+          
+          example: |
+            # User previously ran:
+            hace ho:r:list --owner AID-0xVendorA
+            
+            # Now user runs:
+            hace ho:r:get --fap <some-fap>
+            
+            # Context enrichment infers:
+            # "User likely wants resources from VendorA"
+            # Auto-suggest: --owner AID-0xVendorA
+        
+        user_preferences:
+          stored_in: "ha://ate/config/user-prefs/<aid>.toml"
+          
+          examples:
+            - "preferred_namespace: ha (always default to local)"
+            - "confirmation_mode: smart (auto for T2, prompt for T3+)"
+            - "output_format: json (for scripting users)"
+            - "voice_enabled: true"
+        
+        device_state:
+          sources:
+            - "Current location (GPS if mobile)"
+            - "Network connectivity (WiFi, 4G, offline)"
+            - "Resource availability (CPU, RAM, disk)"
+            - "Peripherals connected (camera, mic, sensors)"
+          
+          usage: |
+            # Example: If offline
+            hace teleport:fn --from ho://... → Auto-fallback to cache
+            
+            # Example: If no mic
+            Disable voice mode, show text-only interface
+      
+      hook_points:
+        - "HP_CLIE_COG_CONTEXT_GET (retrieve context)"
+        - "HP_CLIE_COG_CONTEXT_SET (update context)"
+    
+    stage_authority_validation:
+      module: "FEM-CORE/session + Namespace Validators"
+      purpose: "Ensure actor has permission to execute command"
+      
+      validation_layers:
+        
+        layer_1_actor_identification:
+          method: "Session token + AID lookup"
+          
+          session_management: |
+            # When user first invokes Hace CLI
+            1. Check if valid session exists (ha://d/clie/sessions/<aid>.token)
+            2. If not, request authentication:
+               - Password + OTP (T0-T2)
+               - Fingerprint (T3)
+               - Face ID (T4)
+               - Multi-factor biometric (T5)
+            3. Create session token (valid 1 hour, renewable)
+            4. Store session: { aid, tier, trust_score, expires_at }
+          
+          hook_point: "HP_CLIE_CORE_AUTH"
+        
+        layer_2_tier_check:
+          logic: |
+            required_tier = get_required_tier(command)
+            actor_tier = session.tier
+            
+            if actor_tier < required_tier:
+              return AuthError(f"Requires T{required_tier}+, you are T{actor_tier}")
+            
+            if actor_tier >= T3 and command.is_governance:
+              # ASC weight check
+              asc_weight = get_asc_weight(session.aid)
+              required_weight = command.required_asc_weight
+              
+              if asc_weight < required_weight:
+                return AuthError(f"ASC weight {asc_weight} < required {required_weight}")
+          
+          hook_point: "HP_CLIE_CORE_ASC_CHECK"
+        
+        layer_3_namespace_validation:
+          validators:
+            - "HP_NAMESPACE_VALIDATE_HA (local commands)"
+            - "HP_NAMESPACE_VALIDATE_HO (Helio resources)"
+            - "HP_NAMESPACE_VALIDATE_GO (governance actions)"
+            - "HP_NAMESPACE_VALIDATE_CO (network operations)"
+          
+          example_ho_validation: |
+            # Command: hace ho:r:transfer --fap <fap> --to <aid>
+            
+            Validation:
+              1. Action 'transfer' requires T4+
+              2. Actor is T5 → PASS
+              3. Check if actor owns resource
+              4. Check if target AID is valid
+              5. Check if resource is transferable (not frozen)
+              6. Require biometric confirmation
+        
+        layer_4_risk_assessment:
+          module: "FEM-COG/reasoning"
+          
+          risk_factors:
+            - "Command destructiveness (delete, transfer, enforce)"
+            - "Resource value (AEP cost, rarity)"
+            - "Actor Trust Score (lower score = higher risk)"
+            - "Recent command frequency (rate limiting)"
+            - "HOLE Macro anomaly detection"
+          
+          risk_scoring: |
+            risk_score = calculate_risk({
+              destructiveness: 0.7,  # transfer is semi-destructive
+              value: get_resource_value(fap),
+              trust: actor.trust_score,
+              frequency: get_command_frequency(actor, "transfer", "1h"),
+              anomaly: hole_macro.check_anomaly(command)
+            })
+            
+            if risk_score > 0.9:
+              require_double_confirmation()
+            elif risk_score > 0.7:
+              require_single_confirmation()
+            else:
+              proceed_without_confirmation()
+          
+          hook_point: "HP_CLIE_COG_RISK"
+    
+    stage_dispatch:
+      module: "FEM-CORE/executor"
+      purpose: "Route command to appropriate execution path"
+      
+      dispatch_decision_tree: |
+        if namespace == HA:
+          if action in LOCAL_ACTIONS:
+            route_to: LOCAL_EXECUTOR (ha://e/clie/act/are.ail)
+          else:
+            route_to: ERROR ("Unknown HA action")
+        
+        elif namespace in [HO, GO, CO]:
+          if teleport_required:
+            route_to: TELEPORT_EXECUTOR (ti://e/a/sipe-teleport.ail)
+          else:
+            route_to: ERROR ("Remote namespace requires teleport")
+        
+        else:
+          route_to: ERROR ("Unknown namespace")
+      
+      hook_point: "HP_CLIE_CORE_DISPATCH"
+    
+    stage_execution:
+      modules: "FEM-ACT (ar, teleport, are, kmother)"
+      
+      execution_paths:
+        
+        path_local_ha:
+          executor: "ha://e/clie/act/are.ail"
+          
+          flow: |
+            1. Resolve action handler FAP (routing table lookup)
+            2. Load handler CEP to ha://d/tmp/
+            3. Prepare execution context (args, session, resources)
+            4. Call HP_CLIE_ACT_ARE
+            5. ARE executes CEP in sandbox
+            6. Collect result + resource consumption
+            7. Generate REP
+            8. Clean up ha://d/tmp/
+          
+          example: |
+            Command: hace nep:create my-validator
+            Handler: ha://e/clie/cmd/nep-create.ail
+            Execution: < 50ms
+            Result: "Created NEP at ho://uni/draft/..."
+        
+        path_remote_teleport:
+          executor: "ti://e/a/sipe-teleport.ail"
+          
+          flow: |
+            1. Call HP_CLIE_ACT_TELEPORT_PRE
+            2. Resolve target FAP on remote space
+            3. Create teleport packet:
+               - Source: HA (current device)
+               - Destination: HO/GO/CO
+               - Payload: Command + args + auth token
+               - Encryption: End-to-end AES-256-GCM
+            4. Submit packet to co://g/outbound/
+            5. Wait for response (timeout: 5s)
+            6. Receive result packet from co://g/inbound/
+            7. Decrypt and validate result
+            8. Call HP_CLIE_ACT_TELEPORT_POST
+            9. Generate REP
+          
+          example: |
+            Command: hace ho:r:list --owner AID-0xVendor
+            Handler: ho://e/ars/list.ail (remote)
+            Teleport: ~234ms (network latency)
+            Result: "15 resources found"
+        
+        path_k_mother:
+          executor: "ha://e/clie/act/kmother.ail"
+          
+          trigger_conditions:
+            - "Actor tier >= T3"
+            - "Command is governance action (go:p:enforce, go:c:amend)"
+            - "Command affects multiple AOs (federation)"
+            - "Command has high risk score (> 0.9)"
+          
+          flow: |
+            1. Create ArAction struct:
+               {
+                 command: <full command string>,
+                 actor: <aid>,
+                 tier: <tier>,
+                 timestamp: <iso8601>,
+                 nonce: <unique>,
+                 signature: <actor signature>
+               }
+            
+            2. Call HP_CLIE_ACT_AR_PRE (NEPs can add data)
+            
+            3. Submit to k.mother via RPC:
+               POST ha://e/k.mother/arbiter/submit
+               Body: ArAction
+            
+            4. k.mother runs 14-step validation:
+               [Pháp điển 1] Submit → Flow → Constitutional Filter
+               [Pháp điển 2] Authority → DIM → Chronos
+               [Pháp điển 3] Resource → Priority → Context
+               [Pháp điển 4] Pre-snap → Access → Execute
+               [Pháp điển 5] Reconcile → Ticket → Release → ERPE
+            
+            5. Wait for verdict (sync, < 2s)
+            
+            6. If APPROVED:
+               - Get FEH seal from k.mother
+               - Proceed to execution
+               - Attach FEH to REP
+            
+            7. If REJECTED:
+               - Return verdict with reason
+               - Log to ho://airoz/audit/cli/kmother-reject/
+               - Decrease actor Trust Score (-5 to -20)
+            
+            8. Call HP_CLIE_ACT_AR_POST
+          
+          example: |
+            Command: hace go:p:enforce --fap go://p/rc/energy-cap-v2.ail
+            k.mother: Approved (ASC weight 1.0, no conflicts)
+            FEH seal: FEH-POLICY-ENFORCE-2026-0214-001
+            Execution: Policy enforced at 127 AOs in 567ms
+            REP: ho://airoz/rep/go/enforce-001.ail
+    
+    stage_evidence:
+      module: "FEM-ACT (implicitly) + ERPE"
+      purpose: "Generate immutable proof of command execution"
+      
+      rep_structure: |
+        REP {
+          id: "REP-2026-0214-173045-001",
+          command: "hace ho:r:list --owner AID-0xVendor --sec protected",
+          actor: "AID-0xGaTong",
+          tier: "T5",
+          timestamp: "2026-02-14T17:30:45.123Z",
+          namespace: "HO",
+          action: "r:list",
+          
+          execution: {
+            executor: "ti://e/a/sipe-teleport.ail",
+            duration_ms: 234,
+            resources_consumed: {
+              bandwidth_kb: 12.5,
+              cpu_ms: 47,
+              storage_kb: 0
+            }
+          },
+          
+          result: {
+            status: "SUCCESS",
+            output: "15 resources found",
+            error: null
+          },
+          
+          authority: {
+            auth_method: "session_token",
+            asc_weight: 1.0,
+            feh_seal: "FEH-TELEPORT-2026-0214-001"
+          },
+          
+          audit: {
+            network_origin: "192.168.1.100",
+            device_id: "ASOD-0xLaptop01",
+            session_id: "SES-2026-0214-001"
+          }
+        }
+      
+      storage: |
+        # REP stored in Airoz Poly Ledger
+        Path: ho://airoz/rep/cli/<year>/<month>/<day>/<rep-id>.ail
+        Retention: 90 days
+        
+        # After 90 days, ERPE evaluates:
+        - If significant (T3+ action, high value): Mint VAP
+        - If routine (T1-T2 read): Auto-purge
+        
+        # VAP stored in Airoz
+        Path: ho://airoz/vap/epoch-<n>/<vap-id>.ail
+        Retention: 90 days
+        
+        # After another 90 days: Fossilization decision
+        - If foundational: Fossil as F-Block (can summon QIA)
+        - If archival: Fossil as C-Block (immutable record only)
+      
+      hook_point: "HP_CLIE_ACT_AR_POST, HP_CLIE_ACT_TELEPORT_POST"
+    
+    stage_feedback:
+      module: "FEM-SENSE/talk"
+      purpose: "Return result to user in appropriate modality"
+      
+      feedback_modes:
+        
+        text_mode:
+          output_channel: "stdout, terminal UI"
+          formatting: |
+            # Success
+            hace nep:create my-validator
+            Created NEP 'my-validator' at ho://uni/draft/nep/clie/my-validator.ail
+            
+            # Error
+            hace nep:create my-validator
+            Error: Name 'my-validator' contains invalid character '-'
+            Hint: Use snake_case or camelCase
+          
+          verbosity_levels:
+            - "default: One-line summary"
+            - "--verbose: Step-by-step log"
+            - "--quiet: No output (only exit code)"
+            - "--json: JSON output for scripting"
+        
+        voice_mode:
+          output_channel: "Speaker, Gemini TTS"
+          
+          flow: |
+            1. Format result text
+            2. Call HP_CLIE_SENSE_TALK_PRE (NEPs can modify text)
+            3. Send to Gemini TTS (< 150ms)
+            4. Play audio via speaker
+            5. Call HP_CLIE_SENSE_TALK_POST
+          
+          examples:
+            - Success: "Created validator 'my-validator'"
+            - Error: "Invalid name format. Please use snake case or camel case."
+            - Long result: "Found 15 resources. Would you like me to list them?"
+        
+        ar_mode:
+          output_channel: "AR headset display"
+          
+          rendering: |
+            # Display result as floating AR card
+            # With visual indicators:
+            - Green checkmark for success
+            - Red X for error
+            - Yellow warning for caution
+            
+            # Interactive elements:
+            - Tap card to expand details
+            - Swipe to dismiss
+            - Voice command to retry
+      
+      hook_points:
+        - "HP_CLIE_SENSE_TALK_PRE"
+        - "HP_CLIE_SENSE_TALK_POST"
+
+# =====================================================================
+# PART III: INTEGRATION WITH OTHER ENGINES
+# =====================================================================
+
+engine_integrations:
+  
+  with_k_mother:
+    interface: "ArAction submission + verdict retrieval"
+    protocol: "RPC over local IPC or SIPE teleport"
+    
+    integration_point: "ha://e/clie/act/kmother.ail"
+    
+    workflow: |
+      CLIE → k.mother:
+        1. Create ArAction
+        2. Submit via HP_CLIE_ACT_AR_PRE
+        3. Wait for verdict (< 2s)
+        4. If approved: attach FEH, proceed
+        5. If rejected: show verdict, abort
+      
+      k.mother → CLIE:
+        Verdict {
+          action_id: "AR-2026-0214-001",
+          status: "APPROVED" | "REJECTED",
+          reason: "..." (if rejected),
+          feh_seal: "..." (if approved),
+          timestamp: "..."
+        }
+  
+  with_cafe_os:
+    interface: "Real-world constraint enforcement"
+    protocol: "Passive observation + active blocking"
+    
+    integration_point: "Implicit (CAFE observes all ArActions)"
+    
+    enforcement_examples:
+      - credible: "Command requires 10 AEP, actor has only 5 → REJECT"
+      - accountable: "Cross-border transfer requires legal header → REQUIRE"
+      - federated: "Multi-AO action needs coordination → ORCHESTRATE"
+      - enforced: "Lock door command verified by physical sensor → CONFIRM"
+  
+  with_hole_macro:
+    interface: "Anomaly detection + security monitoring"
+    protocol: "Passive pattern analysis + active blocking"
+    
+    integration_point: "Implicit (HOLE monitors all commands)"
+    
+    detection_scenarios:
+      - voice_injection: "Deepfake voice detected → REJECT + ALERT"
+      - privilege_escalation: "T2 attempting T5 command → BLOCK + LOG"
+      - rate_abuse: "1000 commands/min from single actor → THROTTLE"
+      - namespace_violation: "Using forbidden prefix ti: → REJECT + EDUCATE"
+    
+    response_actions:
+      - "Block command immediately"
+      - "Log to ho://airoz/audit/cli/security/"
+      - "Decrease Trust Score (-10 to -50)"
+      - "Notify T4+ administrators"
+      - "Temporary account suspension (if severe)"
+  
+  with_fpme:
+    interface: "System balance tracking"
+    protocol: "Passive data collection"
+    
+    integration_point: "Implicit (FPME ingests all REPs)"
+    
+    balance_impact:
+      - "Command frequency → FPME-SEN (sensitivity)"
+      - "Resource consumption → FPME-BAL (balance)"
+      - "Value creation → FPME-TRU (truth)"
+      - "Learning from errors → FPME-EVO (evolution)"
+
+# =====================================================================
+# PART IV: PERFORMANCE & RELIABILITY
+# =====================================================================
+
+performance:
+  
+  latency_breakdown:
+    
+    local_command_t2:
+      command: "hace nep:create my-validator"
+      total_latency: "47ms"
+      breakdown:
+        - parsing: "3ms"
+        - namespace_detection: "1ms"
+        - authority_validation: "5ms"
+        - dispatch: "2ms"
+        - execution: "31ms"
+        - evidence: "4ms"
+        - feedback: "1ms"
+    
+    remote_teleport_t2:
+      command: "hace ho:r:list --owner AID-0xVendor"
+      total_latency: "234ms"
+      breakdown:
+        - parsing: "3ms"
+        - namespace_detection: "2ms"
+        - authority_validation: "7ms"
+        - teleport_initiate: "12ms"
+        - network_transit: "180ms"
+        - remote_execution: "25ms"
+        - teleport_return: "8ms"
+        - evidence: "5ms"
+        - feedback: "2ms"
+    
+    voice_command_t3:
+      command: "Voice: 'Check system status'"
+      total_latency: "1.8s"
+      breakdown:
+        - voice_capture: "500ms"
+        - gemini_stt: "187ms"
+        - intent_parsing: "342ms"
+        - authority_validation: "11ms"
+        - execution: "43ms"
+        - evidence: "6ms"
+        - gemini_tts: "145ms"
+        - audio_playback: "520ms"
+  
+  throughput:
+    single_device: "10,000 commands/second (local), 500 commands/second (remote)"
+    cluster: "Scales linearly with device count"
+  
+  reliability:
+    uptime_target: "99.99% (4 nines)"
+    
+    failure_modes:
+      - crash: "Auto-restart within 5s, recover session state"
+      - network_outage: "Graceful fallback to cached CEPs, queue commands"
+      - disk_full: "Auto-cleanup old REPs, alert T4+"
+      - memory_leak: "Periodic garbage collection, restart every 30 days"
+    
+    disaster_recovery:
+      - "Session state persisted to disk every 1 minute"
+      - "REPs persisted before command completion"
+      - "Rollback to last known good state on catastrophic failure"
+
+# =====================================================================
+# END OF CLIE ENGINE DOCUMENTATION
+# =====================================================================
+
+references:
+  - title: "Hace CLI Overview"
+    fap: "ho://know/kip/hace-cli/overview.ail@v1.0.0"
+  
+  - title: "Hace CLI Logic"
+    fap: "ho://know/kip/hace-cli/logic.ail@v1.0.0"
+  
+  - title: "HA-CLIE Macro Engine (Source)"
+    fap: "ha://e/clie/macro.ail@v1.0.0"
+
+training_notes_for_aia: |
+  This CLIE engine document teaches:
+  1. Internal architecture (5 FEM layers)
+  2. Complete processing pipeline (10 stages)
+  3. Integration with other macro engines
+  4. Performance characteristics and reliability
+  
+  Key insights:
+  - CLIE is not just a parser - it's a complete framework
+  - Multi-modal input (voice, vision, gesture, IoT) → unified pipeline
+  - Evidence generation is automatic, not manual
+  - Integration with k.mother, CAFE, HOLE is seamless
+  - Latency targets are aggressive (< 50ms local, < 5s remote)
+  
+  Next document:
+  - hace-cli-hookpoints.ail (Complete hook catalog with examples)
+```
