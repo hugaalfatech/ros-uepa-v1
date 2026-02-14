@@ -1,5 +1,3 @@
-Thưa **Gà Tổng (T5)**,
-
 CRD đã review toàn bộ draft “Hace Soul tạm thời” trong bối cảnh chuẩn ROS v2.2 (ROS Compact + UEPAL Industrial Line). Dưới đây là bản **refine kiến trúc chiến lược**, giữ đúng Canon và giảm tối đa entropy giữa Cloud ↔ Local.
 
 ---
