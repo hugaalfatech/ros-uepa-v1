@@ -1,0 +1,243 @@
+# --- [AIL ARTIFACT ENFORCED] ---
+# Identity: go://docs/go-folder-structure-v1
+# Authority: ASC-1.0-CSA
+
+metadata:
+  id: "go-folder-structure-v1.0"
+  type: "architecture"
+  version: "1.0.0"
+  author: "CSA"
+  status: "DRAFT-GOVERNANCE"
+  tags: [ROS, GO, Folder-Structure, Governance, CAFE]
+  
+context:
+  space: "GO"
+  fap: "go://docs/go-folder-structure-v1.ail"
+  security: "ASC-1.0-CSA"
+
+---
+
+# ⚖️ GO FOLDER STRUCTURE v1.0
+
+Draft kiến trúc thư mục cho GO (Governance Space).  
+Mục tiêu: làm “bản đồ pháp đình” cho RCME / CAFE OS / Alliance Cogen khi ban hành luật, tri thức và cơ chế cưỡng chế.
+
+---
+
+## I. OVERVIEW
+
+```yaml
+go_space:
+  root: "go://"
+  full_name: "Governance Space"
+  role: "Law, judgment, constitutional enforcement"
+  owner: "RCME + CAFE OS"
+  sovereignty: "Judicial (T5 oversight)"
+  physical_location: "Logical overlay (stored in HO)"
+  storage_mapping: "Aliases to ho://r/r/go/"
+```
+
+---
+
+## II. PROTOCOL ZONE – RULE CONTRACTS & CHARTERS
+
+```yaml
+protocol_zone:
+  path: "go://p/"
+  rrp: "ho://r/r/go/p/"
+  description: "Nơi định nghĩa RC (Rule Contract) và Charter cho toàn ROS"
+
+  rc:
+    path: "go://p/rc/"
+    rrp: "ho://r/r/go/p/rc/"
+    purpose: "Tập hợp các bộ RC điều chỉnh hành vi trong từng domain"
+    examples:
+      finance_hooks:
+        path: "go://p/rc/finance-hooks.yaml"
+      security_hooks:
+        path: "go://p/rc/security-hooks.yaml"
+
+  ch:
+    path: "go://p/ch/"
+    rrp: "ho://r/r/go/p/ch/"
+    description: "Hiến chương / Charter templates cho alliance, vendor, franchise"
+```
+
+---
+
+## III. STANDARD ZONE – API & PROTOCOL STANDARDS
+
+```yaml
+standard_zone:
+  path: "go://s/"
+  rrp: "ho://r/r/go/s/"
+  description: "Nơi lưu trữ tiêu chuẩn (standards) về API, hookpoint, namespace"
+
+  api:
+    path: "go://s/api/"
+    rrp: "ho://r/r/go/s/api/"
+    contents:
+      - "abi-standard.yaml"
+      - "hookpoint-registry.yaml"
+
+  protocol:
+    path: "go://s/p/"
+    description: "Chuẩn hóa RAP/FAP/CEP namespace và wiring"
+    critical_files:
+      - "go://s/rap-v1.ail"
+      - "go://s/rap-namespace-fractal-v1.ail"
+```
+
+---
+
+## IV. KNOWLEDGE ZONE – GOVERNANCE KNOWLEDGE & MAPPINGS
+
+```yaml
+knowledge_zone:
+  path: "go://k/"
+  rrp: "ho://r/r/go/k/"
+  description: "Tri thức quản trị, mapping tables, trust score"
+
+  ts:
+    path: "go://k/ts/"
+    rrp: "ho://r/r/go/k/ts/"
+    purpose: "Trust Score database cho actors, vendors, CEP"
+
+  p:
+    path: "go://k/p/"
+    description: "Governance protocols (cách thực thi luật)"
+
+  bp:
+    path: "go://k/bp/"
+    description: "Blueprints cho các mô hình quản trị"
+
+  t:
+    path: "go://k/t/"
+    description: "Term / Thuật ngữ chuẩn của ROS-UEPA"
+    examples:
+      - "go://k/t/lazy-type.ail"
+      - "go://k/t/fractal.ail"
+      - "go://k/t/cross-link.ail"
+
+  mt:
+    path: "go://k/mt/"
+    description: "Mapping Table giữa các Space/Path"
+    critical_files:
+      - "go://k/mt/ros.sio"   # Master mapping
+      - "go://k/mt/ho.sio"    # HO space map
+      - "go://k/mt/ha.sio"    # HA space map
+      # ... (8 SIO files cho từng space)
+```
+
+---
+
+## V. CONSTITUTION & POLICY ZONE
+
+```yaml
+constitution_zone:
+  path: "go://c/"
+  description: "Hiến pháp số và tu chính án"
+
+  const:
+    path: "go://c/const/"
+    purpose: "Hiến pháp gốc của ROS"
+
+  amend:
+    path: "go://c/amend/"
+    purpose: "Tu chính án, sửa đổi hiến pháp"
+
+policy_zone:
+  path: "go://p/"
+  description: "Chính sách cụ thể hoá hiến pháp"
+
+  m:
+    path: "go://p/m/"
+    name: "Mechanism - Cơ chế"
+    critical_files:
+      - "go://p/m/namespace-standard.ail"
+      - "go://p/m/artifact-storage-manifest.ail"
+      - "go://p/m/artifact-storage-teleport.ail"
+```
+
+---
+
+## VI. CAFE MODULES – C, A, F, E
+
+```yaml
+cafe_zone:
+  description: "Chi tiết 4 module CAFE trong GO space"
+
+  credibility:
+    path: "go://law/credibility/"
+    description: "C-Module of CAFE (Credible) – ZE-Proof, multi-sig"
+
+  accountability:
+    path: "go://audit/accountability/"
+    description: "A-Module of CAFE (Accountable) – header legal, trace"
+
+  federated:
+    path: "go://judgment/federated/"
+    description: "F-Module of CAFE (Federated) – phán xử phân tán"
+
+  enforcement:
+    path: "go://white-ledger/enforcement/"
+    description: "E-Module of CAFE (Enforced) – White Ledger, t5_overrides_logged"
+    immutable: true
+    t5_overrides_logged: true
+```
+
+---
+
+## VII. WHITE LEDGER & JUDGMENT RECORDS
+
+```yaml
+white_ledger_zone:
+  path: "go://white-ledger/"
+  description: "Sổ trắng ghi lại mọi override, cưỡng chế"
+
+  enforcement:
+    path: "go://white-ledger/enforcement/"
+    immutable: true
+    purpose: "Chuẩn hoá log cho mọi hành động cưỡng chế có thẩm quyền"
+
+judgment_zone:
+  path: "go://judgment/"
+  description: "Lưu phán quyết của k.mother và hội đồng"
+
+  federated:
+    path: "go://judgment/federated/"
+    description: "Bản ghi phán quyết liên minh (multi-AO)"
+```
+
+---
+
+## VIII. AUDIT & TRACEABILITY
+
+```yaml
+audit_zone:
+  path: "go://audit/"
+  description: "Tầng audit cho mọi hành động trong ROS"
+
+  accountability:
+    path: "go://audit/accountability/"
+    purpose: "Log trách nhiệm (ai làm gì, khi nào, ở đâu)"
+```
+
+---
+
+## IX. USAGE NOTES FOR ALLIANCE COGEN
+
+```yaml
+usage_for_alliance_cogen:
+  purpose:
+    - "Chuẩn hoá nơi đặt RC/Charter/Standard cho co-working"
+    - "Làm common map cho AIA + HI + AO khi co-execute"
+  constraints:
+    - "Không ghi RC/Charter ngoài go://p/*"
+    - "Không dùng go://k/t/* để đặt thuật ngữ chưa được ASC duyệt"
+  recommended_flow:
+    - "Khi tạo luật mới: đề xuất vào go://p/m/* và go://p/rc/*"
+    - "Khi tạo thuật ngữ: thêm vào go://k/t/* qua review"
+    - "Khi thiết kế standard mới: lưu tại go://s/* và map sang ho://r/ars-r/go/*"
+```
+

@@ -2,6 +2,5 @@
 
 Thư mục này đại diện cho GO (Governance Space) trong ROS folder structure.
 
-Index đầy đủ cấu trúc:  
-`https://raw.githubusercontent.com/hugaalfatech/ros-uepa-v1/refs/heads/main/docs/ros-folder-structure.ail`
-
+Draft chi tiết cho GO (Governance):  
+`https://raw.githubusercontent.com/hugaalfatech/ros-uepa-v1/refs/heads/main/docs/go-folder-structure-v1.ail`
